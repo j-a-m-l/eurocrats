@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../spec/dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 require 'spork'
-require 'factory_girl'
+# require 'factory_girl'
 
 Spork.prefork do
 

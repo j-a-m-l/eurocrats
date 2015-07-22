@@ -4,6 +4,8 @@
 # VAT number validation through web interface:
 # http://ec.europa.eu/taxation_customs/vies/vatResponse.html
 
+# Unavailability:
+# http://ec.europa.eu/taxation_customs/vies/viesspec.do
 # TODO provide alternative services
 
 # Operations:
@@ -15,28 +17,20 @@ module Eurocrat
     class << self
 
       def seems_valid? number
-        true
+        Valvat::Syntax.validate number
       end
 
-      def is_valid? number
+      def exists? number
+        Valvat::Lookup.validate number
       end
 
-      def check number
-        Eurocrat.debug = true
-
-        return nil unless seems_valid? number
-
-        # TODO open_timeout
-        # TODO read_timeout
-        client = Savon.client(
-          wsdl: Eurocrat.vies_wsdl_url,
-          # element_form_default: :qualified,
-          pretty_print_xml: Eurocrat.debug,
-        )
-
-        # require 'byebug'; byebug;
-      rescue
+      def check number, requester_number=nil
+        response = Valvat::Lookup.validate number, detail: true, requester_vat: requester_number
       end
+
+      # def query number
+      #   Valvat(number)
+      # end
 
     end
 
