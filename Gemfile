@@ -12,3 +12,45 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+
+gem 'geocoder'
+# gem 'eurovat'
+
+group :development do
+  gem 'spork'
+
+  gem 'guard'
+  gem 'guard-bundler'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  gem 'guard-rails'
+end
+
+group :test do
+  gem 'rack-test'
+  # gem 'capybara'
+  gem 'rspec'
+  gem 'rspec-rails'
+  # gem 'shoulda-matchers'
+  # gem 'shoulda-callback-matchers'
+  gem 'database_cleaner'
+  # gem 'factory_girl_rails'
+end
+
+group :development, :test do
+  gem 'sqlite3'
+
+  # gem 'faker'
+  gem 'ffaker'
+
+  gem 'better_errors'
+  gem 'did_you_mean'
+
+  gem 'byebug'
+  gem 'pry'
+end
+
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  # gem 'sdoc', require: false
+end
