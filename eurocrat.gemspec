@@ -18,9 +18,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency 'rails', '~> 4.2.0'
-  # s.add_dependency 'savon', '~> 2.1.0'
+  s.add_dependency 'countries'
   s.add_dependency 'valvat'
-  # s.add_dependency 'eurovat'
   s.add_development_dependency 'sqlite3'
 
 end

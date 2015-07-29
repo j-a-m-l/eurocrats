@@ -14,7 +14,7 @@ gemspec
 # gem 'debugger'
 
 gem 'geocoder'
-# gem 'eurovat'
+gem 'countries'
 
 group :development do
   gem 'spork'
