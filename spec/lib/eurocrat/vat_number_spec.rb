@@ -13,9 +13,9 @@ describe Eurocrat::VatNumber do
         context 'exists' do
           it '' do
             described_class.check customer_vat_number
-            require 'byebug'; byebug;
           end
         end
+
         context "doesn't exist" do
         end
 
@@ -23,6 +23,21 @@ describe Eurocrat::VatNumber do
     end
 
     context 'with requester VAT number' do
+    end
+
+    context 'with detail' do
+    end
+
+    describe 'when VIES VAT service is unavailable' do
+    end
+
+    describe 'when VAT database of the customer country is unavailable' do
+    end
+
+    describe 'when request times out' do
+    end
+
+    describe 'when unknown problems happen' do
     end
     
   end

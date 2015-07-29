@@ -10,11 +10,13 @@
 
 # Operations:
 # * check_vat
-# * check_va_approx
+# * check_vat_approx
 module Eurocrat
   class VatNumber
 
     class << self
+
+      # TODO cache vat checkings for avoiding requests
 
       def seems_valid? number
         Valvat::Syntax.validate number
@@ -24,8 +26,8 @@ module Eurocrat
         Valvat::Lookup.validate number
       end
 
-      def check number, requester_number=nil
-        response = Valvat::Lookup.validate number, detail: true, requester_vat: requester_number
+      def check number, requester_number=nil, detail=false
+        response = Valvat::Lookup.validate number, detail: detail, requester_vat: requester_number
       end
 
       # def query number
