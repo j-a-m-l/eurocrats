@@ -23,19 +23,6 @@ describe Eurocrat::VatNumbersController do
     end
 
     context 'VAT number seems valid' do
-      before(:each) { get :show, { email: email } }
-
-      context 'email exists' do
-        let(:email) { create(:predictable_account, :confirmed)[:email] }
-
-        it_responds :bad_request, with_json: { success: false }
-      end
-
-      context "email doesn't exist" do
-        let(:email) { attributes_for(:account, :random, :confirmed)[:email] }
-
-        it_responds :success, with_json: { success: true }
-      end
     end
     
   end

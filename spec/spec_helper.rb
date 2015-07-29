@@ -35,15 +35,12 @@ Spork.prefork do
     # instead of true.
     config.use_transactional_fixtures = false
 
-    config.before(:suite) { DatabaseCleaner.clean_with :truncation }
-    config.before(:each)  { DatabaseCleaner.strategy = :transaction }
-    config.before(:each)  { DatabaseCleaner.start }
-    config.after(:each)   { DatabaseCleaner.clean }
-
     # If true, the base class of anonymous controllers will be inferred
     # automatically. This will be the default behavior in future versions of
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = true
+
+    config.infer_spec_type_from_file_location!
 
     # Includes the engine URL helpers on related tests
     config.include Eurocrat::Engine.routes.url_helpers, type: :controller
@@ -56,6 +53,11 @@ Spork.prefork do
     config.order = "random"
 
     # config.include FactoryGirl::Syntax::Methods
+
+    config.before(:suite) { DatabaseCleaner.clean_with :truncation }
+    config.before(:each)  { DatabaseCleaner.strategy = :transaction }
+    config.before(:each)  { DatabaseCleaner.start }
+    config.after(:each)   { DatabaseCleaner.clean }
 
     # Aliases that improves readability
     config.alias_it_should_behave_like_to :it_renders, 'renders'
