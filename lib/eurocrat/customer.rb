@@ -55,15 +55,12 @@ module Eurocrat
     }
 
     def initialize data=nil
-      # if ip
-      #   @ip_location[:ip] = ip
-      # end
     end
 
     def << evidence
       case evidence
         when VatNumber then vat_number = evidence
-        when Hash then evidence.each_pair {|k, v| @evidences[k] = Evidence.new v }
+        when Hash then evidence.each_pair {|k, v| evidences[k] = Evidence.new v }
         else raise ArgumentError.new 'Evidence should be a Hash or a VatNumber object'
       end
 
@@ -72,40 +69,17 @@ module Eurocrat
 
     def vat_number= vat_number
       @vat_number = vat_number.is_a?(VatNumber) ? vat_number : VatNumber.new vat_number
-      @evidences['eurocrat.vat_number'] = Evidence.new @vat_number
+      evidences['eurocrat.vat_number'] = Evidence.new @vat_number
     end
 
-    # TODO rename has_a_valid_vat_number?
-    def valid_vat_number?
-      if vat_number
-        check_vat_number
+    def has_valid_vat_number?
+      if @vat_number
+        vat_number.validate_for @supplier.vat_number
       else
         false
       end
     end
 
-    def check_vat_number
-      @vat_number = VatNumber.check @vat_number, @supplier.vat_number
-    end
-
-
-    #
-    # TODO not required in Rack (Geocoder gem does it)
-    #
-
-    def locate
-      Geocoder.search @ip_location[:ip]
-    end
-
-    def update_location
-      raise Eurocrat::IpLocationError.new 'lol' unless (new_location = locate_ip)
-
-      # TODO more than one
-      @ip_location = new_location.first
-    end
-
   end
-
-  class IpLocationError < StandardError; end
 
 end

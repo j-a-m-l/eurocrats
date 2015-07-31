@@ -15,7 +15,7 @@ module Eurocrat
 
     class << self
 
-      # TODO cache vat checkings for avoiding requests
+      # TODO cache responses for avoiding requests
 
       def seems_valid? number
         Valvat::Syntax.validate number
@@ -26,44 +26,47 @@ module Eurocrat
       end
       alias exists? is_valid?
 
-      def check number, requester_number=nil, detail=false
-        response = Valvat::Lookup.validate number, detail: detail, requester_vat: requester_number
+      def validate number, requester_number=nil, detail=false
+        Valvat::Lookup.validate number, detail: detail, requester_vat: requester_number
       end
-
-      # def query number
-      #   Valvat(number)
-      # end
 
     end
 
-    attr_reader :country
-    attr_reader :number
+    attr_reader :vat_number
+
+    # TODO raise if not validated?
+
+    attr_reader :country_code
+
+    attr_reader :request_date
+    attr_reader :name
     attr_reader :address
-    attr_reader :detail
-    @@detail = {
-      country_code: nil,
-      vat_number: '',
-      request_date: nil, # Date instead of DateTime?
-
-      # Optional
-      name: '',
-      address: '',
-    }
-
-    # TODO Greece? => country_code_alpha2
-
-    # TODO requester
-    attr_reader :validated_for
+    attr_reader :requester_vat_number
 
     def initialize number
     end
 
+    # Grece VAT country code is "EL", but their ISO 3166-1 alpha-2 country code is "GR"
+    def country_code_alpha2
+      country_code == 'EL' ? 'GR' : country_code
+    end
+
     def seems_valid?
-      self.class.seems_valid? number
+      self.class.seems_valid? vat_number
     end
 
     def is_valid?
-      self.class.is_valid? number
+      self.class.is_valid? vat_number
+    end
+    alias exists? is_valid? 
+
+    def validate_for requester_vat_number
+      validate (@requester_vat_number = requester_vat_number)
+    end
+
+    def validate
+      response = self.class.validate vat_number, @requester_vat_number, true
+      # TODO
     end
 
   end
