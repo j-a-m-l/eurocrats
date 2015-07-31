@@ -23,6 +23,7 @@ module Eurocrat
     def_delegators :@customer, :evidences, :<<
 
     attr_reader :judge
+    def_delegator :@customer, :conflicts
 
     # TODO options...
     def initialize supplier=nil, customer=nil, judge=nil
@@ -48,7 +49,8 @@ module Eurocrat
     alias enough? enough_evidences?
 
     def decided_country
-      raise unless enough_evidences?
+      raise ConflictingEvidencesError unless enough_evidences?
+
       @decided_country
     end
 
@@ -56,8 +58,9 @@ module Eurocrat
       VatRates.for decided_country
     end
 
-    # If the user is in the same country than the supplier, it should usually be charged.
-    # Then, the supplier must pay that collected VAT, although she can deduct her paid VAT
+    # If customer is in the same country than supplier, it should be charged
+    # Then, the supplier must pay that collected VAT to her tax authorities,
+    # although she could deduct her paid VAT
     def vat_must_be_charged?
       if decided_country == @supplier.country
         true
@@ -66,16 +69,30 @@ module Eurocrat
       end
     end
 
-    # def with_vat amount, rate=nil
-    #   unless vat_must_be_charged?
+    # TODO add the "as" method to Numeric objects
+    # def vat_for amount, rate=nil
+    #   if vat_must_be_charged?
     #     rate ||= @rate
-    #     amount = amount * vat_rates[rate] / 100
+    #     amount * vat_rates[rate] / 100
+    #   else
+    #     0
     #   end
-
-    #   # TODO add the "as" method to Numeric objects
-
-    #   amount
     # end
 
+    # def with_vat amount, rate=nil
+    #   amount * vat_for amount, rate
+    # end
+
+    # `conflicts` is forwarded to Judge
+    alias conflicting_evidences conflicts 
+
+    def non_conflicting_evidences
+      #evidences - conflicts
+    end
+    alias not_conflicting_evidences non_conflicting_evidences
+
   end
+
+  class Eurocrat::ConflictingEvidencesError < StandardError; end
+
 end

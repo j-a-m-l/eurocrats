@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Eurocrat
 
   # Customer holds the items that prove the customer current VAT circumstance
@@ -9,12 +11,14 @@ module Eurocrat
   # TODO easy ActiveRecord
   #
   class Customer
+    extend Forwardable
+
     # TODO ?
     attr_reader :date
 
     attr_accessor :billing_address
     attr_accessor :ip_location
-    attr_accessor :vat_number
+    attr_reader :vat_number
 
     attr_accessor :evidences
     @@evidences = {
@@ -57,19 +61,21 @@ module Eurocrat
     end
 
     def << evidence
-      unless [Hash, VatNumber].include? evidence.class
-        raise ArgumentError.new 'Evidence should be a Hash or VatNumber object'
-      end
-
-      if evidence.is_a? VatNumber
-        @evidences['eurocrat.vat_number'] = evidence
-      else
-
+      case evidence
+        when VatNumber then vat_number = evidence
+        when Hash then evidence.each_pair {|k, v| @evidences[k] = Evidence.new v }
+        else raise ArgumentError.new 'Evidence should be a Hash or a VatNumber object'
       end
 
       self
     end
 
+    def vat_number= vat_number
+      @vat_number = vat_number.is_a?(VatNumber) ? vat_number : VatNumber.new vat_number
+      @evidences['eurocrat.vat_number'] = Evidence.new @vat_number
+    end
+
+    # TODO rename has_a_valid_vat_number?
     def valid_vat_number?
       if vat_number
         check_vat_number
