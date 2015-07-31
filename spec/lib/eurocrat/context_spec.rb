@@ -60,6 +60,16 @@ describe Eurocrat::Context do
   end
 
 
+  describe '#consumer' do
+  end
+  describe '#consumer=' do
+  end
+
+  describe '#vat_number' do
+  end
+  describe '#vat_number=' do
+  end
+
 
   describe '#e_commerce!' do
   end
@@ -68,9 +78,6 @@ describe Eurocrat::Context do
   end
 
   describe '#conflictives' do
-  end
-
-  describe '#european_union?' do
   end
   
 end
