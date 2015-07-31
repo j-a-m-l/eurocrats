@@ -10,48 +10,39 @@ module Eurocrat
 
       # From ISO 3166-1 numeric or ISO 3166-1 alpha-3 to ISO 3166-1 alpha-2
       # def to_alpha2_country_code code
-      # TODO refactor this mess
-      def country_code_to_alpha2 code
+      def code_to_alpha2 code
         code = code.to_s if code.is_a? Integer
 
-        if code.is_a? String
-          if code.length == 2
-            if ISO3166::Country[code]
-              return code
-            else
-              raise_non_existent code, 'alpha-2'
-            end
-
-          elsif code.length == 3
-
-            # It is string that could be used as an integer
-            if code[/\d{3}/] == code
-              country = ISO3166::Country.find_all_by 'number', code
-              if country.any?
-                return country.values.first['alpha2']
-              else
-                raise_non_existent code, 'numeric'
-              end
-
-            else
-              country = ISO3166::Country.find_all_by 'alpha3', code
-              if country.any?
-                return country.values.first['alpha2']
-              else
-                raise_non_existent code, 'alpha-3'
-              end
-            end
-          end
+        unless code.is_a? String and code.length.between? 2, 3
+          raise Eurocrat::InvalidCountryCodeError.new 'The argument is not a valid ISO 3166-1 code'
         end
 
-        raise Eurocrat::InvalidCountryCodeError.new 'The code can not be converted to ISO 3166-1 alpha-2'
+        if code.length == 2
+          ISO3166::Country[code] ? code : raise_non_existent(code, 'alpha-2')
+
+        elsif code.length == 3
+
+          # If is a string that could be used as an integer
+          key_and_type = (code[/\d{3}/] == code) ? %w[number numeric] : %w[alpha3 alpha-3]
+
+          search_and_convert_code_to_alpha2 code, *key_and_type
+        end
       end
-      alias to_alpha2 country_code_to_alpha2
+      alias to_alpha2 code_to_alpha2
 
       private
 
+        def search_and_convert_code_to_alpha2 code, key, type
+          country = ISO3166::Country.find_all_by key, code
+          if country.any?
+            country.values.first['alpha2']
+          else
+            raise_non_existent code, type
+          end
+        end
+
         def raise_non_existent code, type
-          raise Eurocrat::InvalidCountryCodeError.new "\"#{code}\" is not an existent ISO 3166-1 #{type} code"
+          raise Eurocrat::InvalidCountryCodeError.new "\"#{code}\" is not a ISO 3166-1 #{type} code"
         end
 
     end
