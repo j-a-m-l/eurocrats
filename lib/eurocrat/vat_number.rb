@@ -1,3 +1,5 @@
+require_relative 'vies'
+
 # VAT number
 #
 # Some incomplete validation rules:
@@ -13,37 +15,20 @@
 module Eurocrat
   class VatNumber
 
-    class << self
+    class InvalidError < StandardError; end
 
-      # TODO cache responses for avoiding requests
-
-      def seems_valid? number
-        Valvat::Syntax.validate number
-      end
-
-      def is_valid? number, detail=false
-        Valvat::Lookup.validate number, detail: detail
-      end
-      alias exists? is_valid?
-
-      def validate number, requester_number=nil, detail=false
-        Valvat::Lookup.validate number, detail: detail, requester_vat: requester_number
-      end
-
+    def self.seems_valid? vat_number
+      Valvat::Syntax.validate vat_number
     end
 
-    attr_reader :vat_number
-
-    # TODO raise if not validated?
-
+    # attr_reader :vat_number
+    attr_reader :number
     attr_reader :country_code
 
-    attr_reader :request_date
-    attr_reader :name
-    attr_reader :address
-    attr_reader :requester_vat_number
-
-    def initialize number
+    # TODO raise if doesn't exist?
+    def initialize vat_number
+      @vat_number = vat_number
+      raise InvalidError.new "\"#@vat_number\" is not a valid VAT number" unless seems_valid?
     end
 
     # Grece VAT country code is "EL", but their ISO 3166-1 alpha-2 country code is "GR"
@@ -52,21 +37,11 @@ module Eurocrat
     end
 
     def seems_valid?
-      self.class.seems_valid? vat_number
+      self.class.seems_valid? @vat_number
     end
 
-    def is_valid?
-      self.class.is_valid? vat_number
-    end
-    alias exists? is_valid? 
-
-    def validate_for requester_vat_number
-      validate (@requester_vat_number = requester_vat_number)
-    end
-
-    def validate
-      response = self.class.validate vat_number, @requester_vat_number, true
-      # TODO
+    def to_s
+      @vat_number
     end
 
   end
