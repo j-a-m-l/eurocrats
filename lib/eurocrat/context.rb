@@ -59,6 +59,8 @@ module Eurocrat
 
     # This method checks only the customer location evidences
     #
+    # The default strategy is to find `@minimum` evidences with the same country code
+    #
     # If you need a custom strategy for deciding about them, like prioritizing
     # some evidences or ignoring others, you should be able to achieve that just
     # overriding this method in an inherited Context class

@@ -1,11 +1,15 @@
 module Eurocrat
   #
+  # Some evidences prove the customer location, while others don't
   #
   # It normalizes all the country codes to ISO 3166-1 alpha-2
+  # (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
   #
   class Evidence
 
-    # TODO extensible
+    class UnavailabeCountryCodeError < StandardError; end
+
+    # TODO use method with Regex
     COUNTRY_CODE_KEYS = %w[
       country_code_alpha2
       country_code_alpha3
@@ -28,7 +32,7 @@ module Eurocrat
         end
 
         # TODO class
-        raise StandardError
+        raise UnavailabeCountryCodeError
       end
 
       # Tries to recognize an acceptable country code
@@ -55,14 +59,19 @@ module Eurocrat
 
     end
 
-    # ISO 3166-1 alpha-2
+    # ISO 3166-1 alpha-2, extracted from the source of the evidence
     attr_reader :country_code
 
-    # Object that contains the country code that supports the evidence
-    attr_reader :data
+    # Object that contains the information that supports the evidence
+    attr_reader :source
 
-    def initialize country_code, data
-      @country_code, @data = Country.to_alpha2(country_code), data
+    # The exact moment in which the evidence was collected
+    attr_reader :collected_at
+
+    def initialize country_code, source
+      # TODO dup && freeze the source?
+      @country_code, @source = Country.to_alpha2(country_code), source
+      @collected_at = DateTime.now
     end
 
   end

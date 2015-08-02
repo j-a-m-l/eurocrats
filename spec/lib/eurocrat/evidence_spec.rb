@@ -68,19 +68,19 @@ describe Eurocrat::Evidence do
   describe '#initialize' do
 
     let(:country_code) { 'CH' }
-    let(:data) { 'example data' }
+    let(:source) { 'example source' }
 
     it 'establish the country code' do
-      expect(described_class.new(country_code, data).country_code).to eq country_code
+      expect(described_class.new(country_code, source).country_code).to eq country_code
     end
 
-    it 'establish the data' do
-      expect(described_class.new(country_code, data).data).to be data
+    it 'establish the source' do
+      expect(described_class.new(country_code, source).source).to be source
     end
 
     it 'tries to convert the country_code parameter to ISO 3166-1 alpha-2' do
       expect(Eurocrat::Country).to receive(:to_alpha2).with country_code
-      described_class.new country_code, data
+      described_class.new country_code, source
     end
   end
 

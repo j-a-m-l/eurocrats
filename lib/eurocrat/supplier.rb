@@ -1,4 +1,6 @@
-module Eurcrat
+require_relative 'taxable'
+
+module Eurocrat
   # Supplier holds the data of the service supplier
   # This data is used for:
   #
@@ -7,12 +9,6 @@ module Eurcrat
   # * Invoicing (in the future)
   #
   class Supplier
-
-    attr_accessor :address
-
-    attr_accessor :vat_number
-
-    attr_accessor :default_rate
-
+    include Taxable
   end
 end
