@@ -13,6 +13,7 @@ gemspec
 # To use debugger
 # gem 'debugger'
 
+gem 'jbuilder'
 gem 'geocoder'
 gem 'countries'
 
