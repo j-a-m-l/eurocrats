@@ -2,10 +2,13 @@ describe Eurocrat::VatNumbersController do
 
   routes { Eurocrat::Engine.routes }
 
-  describe '#show' do
-    let(:vat_number) { 'EX4MP13' }
+  let(:vat_number) { 'EX4MP13' }
 
-    context 'bad request' do
+  let(:get_show) { get :show, format: :json, vat_number: vat_number }
+
+  describe '#show' do
+
+    xcontext 'bad request' do
       describe 'without VAT number' do
         before(:each) { get :show, {} }
 
@@ -19,12 +22,46 @@ describe Eurocrat::VatNumbersController do
       end
     end
 
-    context 'VAT number seems invalid' do
+    describe 'when VIES VAT service is unavailable' do
     end
 
-    context 'VAT number seems valid' do
+    describe 'when VAT database of the customer country is unavailable' do
     end
-    
+
+    describe 'when connection fails' do
+      # SocketError
+    end
+
+    describe 'when request times out' do
+    end
+
+    describe 'when unknown problems happen' do
+    end
+
+    context 'good request' do
+      let(:validation_result) { double 'Validation Result' }
+
+      let(:mock_validation!) {
+        is_expected.to receive(:validation).and_return validation_result
+      }
+
+      it 'responds with status 200' do
+        mock_validation!
+        expect(get_show.status).to be 200
+      end
+
+      it 'assigns the result of the validation to @valid' do
+        mock_validation!
+        get_show
+        expect(assigns :valid).to eq validation_result
+      end
+
+      xcontext 'with the default supplier' do
+      end
+
+      xcontext 'with a supplier' do
+      end
+    end
   end
   
 end

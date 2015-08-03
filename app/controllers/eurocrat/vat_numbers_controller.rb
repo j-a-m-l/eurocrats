@@ -1,11 +1,31 @@
-class Eurocrat::VatNumbersController < Eurocrat::ApplicationController
-  include Eurocrat::Concerns::VatNumber
+require_relative './concerns/eurocratable'
 
-  # GET /vat-numbers/:vat_number
-  #
-  # TODO improve security: limit petitions, add delays
-  def show
-    render json: check_vat_number
+module Eurocrat
+  class VatNumbersController < ApplicationController
+
+    # TODO GET /vat-numbers/:vat_number/valid
+    # TODO GET /vat-number-validation/:vat_number
+    # GET /vat-numbers/:vat_number
+    #
+    # TODO validate for supplier
+    # TODO return errors
+    #
+    # TODO improve security: limit petitions, add delays
+    def show
+      @valid = validation
+    end
+
+    protected
+
+      def validation
+        Eurocrat::Vies.validate_vat_number vat_number_param
+      end
+
+    private
+
+      def vat_number_param
+        params.require :vat_number
+      end
+
   end
-
 end
