@@ -12,7 +12,6 @@ require_relative './eurocrat/taxable'
 require_relative './eurocrat/evidentiable'
 require_relative './eurocrat/customer'
 require_relative './eurocrat/supplier'
-require_relative './eurocrat/vat_rates'
 require_relative './eurocrat/context'
 
 require_relative './eurocrat/rack/request'
@@ -37,5 +36,9 @@ module Eurocrat
 
   mattr_accessor :country_codes
   @@country_codes = {}
+
+  def self.country code
+    ISO3166::Country[code_to_alpha2 code]
+  end
 
 end

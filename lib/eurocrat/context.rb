@@ -106,8 +106,17 @@ module Eurocrat
     end
     alias country_code evidenced_country_code
 
+    def evidenced_country
+      Eurocrat.country evidenced_country_code
+    end
+    alias country evidenced_country
+
     def country_code_of evidence_label
       evidences[evidence_label].country_code
+    end
+
+    def country_of evidence_label
+      Eurocrat.country evidences[evidence_label].country_code
     end
 
     def taxables?
@@ -143,15 +152,15 @@ module Eurocrat
     end
 
     def vat_rates
-      VatRates.in evidenced_country_code
+      evidenced_country.vat_rates
     end
 
     def vat_rates_in country_code
-      VatRates.in country_code
+      Eurocrat.country(country_code).vat_rates
     end
 
     def vat_rates_of evidence_label
-      VatRates.in country_code_of evidence_label
+      country_of(evidence_label).vat_rates
     end
 
     # TODO add the "as" method to Numeric objects

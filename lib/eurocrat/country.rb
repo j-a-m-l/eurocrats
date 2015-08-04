@@ -2,7 +2,11 @@ module Eurocrat
 
   class InvalidCountryCodeError < StandardError; end
 
-  # TODO merge with VAT rates
+  # VAT rates for e-services are the same than the standard: http://ec.europa.eu/taxation_customs/tic/public/vatRates/vatratesSearch.html
+  # TYPES = %[superreduced reduced standard parking]
+  # e-commerce => standard 
+  # reduces is array
+
   # TODO inherit from Country (countres gem)?
   class Country
 
