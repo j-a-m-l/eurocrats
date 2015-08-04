@@ -84,9 +84,14 @@ module Eurocrat
 
     # This method depends on the result of `non_conflicting_location_evidences`, so it should
     # not be necessary to override it
+    # TODO
     def conflicting_location_evidences
     end
     alias conflicts conflicting_location_evidences
+
+    def conflicts? label_a, label_b
+      evidences[label_a].country_code != evidences[label_b].country_code
+    end
 
     def enough_evidences?
       unless evidences.empty?
