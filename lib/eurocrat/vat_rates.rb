@@ -7,7 +7,7 @@ module Eurocrat
     # e-commerce => standard 
     # reduces is array
 
-    def self.for country
+    def self.in country
     end
 
   end

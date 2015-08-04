@@ -140,7 +140,11 @@ describe Eurocrat::Context do
     end
   end
 
+  # TODO alias
   describe '#evidenced_country_code' do
+  end
+
+  describe '#country_code_of' do
   end
 
   # TODO alias
@@ -162,10 +166,16 @@ describe Eurocrat::Context do
   describe '#vat_rates' do
   end
 
+  describe '#vat_rates_in' do
+  end
+
+  describe '#vat_rates_of' do
+  end
+
   describe '#vat_for' do
   end
 
-  describe '#add_vat_tovat' do
+  describe '#with_vat' do
   end
 
   describe '#open' do

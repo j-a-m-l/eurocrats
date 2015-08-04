@@ -104,7 +104,11 @@ module Eurocrat
 
       non_conflicting_location_evidences.values.first.country_code
     end
+    alias country_code evidenced_country_code
 
+    def country_code_of evidence_label
+      evidences[evidence_label].country_code
+    end
 
     def taxables?
       @supplier.taxable? && @customer.taxable?
@@ -138,9 +142,16 @@ module Eurocrat
       end
     end
 
-
     def vat_rates
-      VatRates.for decided_country_code
+      VatRates.in evidenced_country_code
+    end
+
+    def vat_rates_in country_code
+      VatRates.in country_code
+    end
+
+    def vat_rates_of evidence_label
+      VatRates.in country_code_of evidence_label
     end
 
     # TODO add the "as" method to Numeric objects
@@ -154,7 +165,7 @@ module Eurocrat
     end
 
     # TODO add the "as" method to Numeric objects
-    def add_vat_to amount, rate=nil
+    def with_vat amount, rate=nil
       amount * vat_for(amount, rate)
     end
 
