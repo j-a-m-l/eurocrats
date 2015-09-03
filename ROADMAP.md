@@ -12,8 +12,6 @@
 
 ## 0.9.0
 
- * Cookies?
-
 ## 0.8.0
 
   * Timeouts
@@ -32,3 +30,5 @@
 ## 0.4.0
 
 ## 0.3.0
+
+  * Currency conversion
