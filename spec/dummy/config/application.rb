@@ -4,9 +4,9 @@ require 'rails/all'
 
 Bundler.require(*Rails.groups)
 
-require "eurocrat"
+require "eurocrats"
 # Load this initializer before the others
-require_relative 'initializers/eurocrat'
+require_relative 'initializers/eurocrats'
 
 module Dummy
   class Application < Rails::Application

@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Eurocrat::Engine, at: '/'
+  mount Eurocrats::Engine, at: '/'
 end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    eurocrat (0.2.0)
+    eurocrats (0.2.0)
       countries
       jbuilder
       rails (~> 4.2.0)
@@ -231,7 +231,7 @@ DEPENDENCIES
   countries
   database_cleaner
   did_you_mean
-  eurocrat!
+  eurocrats!
   ffaker
   geocoder
   guard

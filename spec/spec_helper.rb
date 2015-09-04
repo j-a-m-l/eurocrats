@@ -43,8 +43,8 @@ Spork.prefork do
     config.infer_spec_type_from_file_location!
 
     # Includes the engine URL helpers on related tests
-    config.include Eurocrat::Engine.routes.url_helpers, type: :controller
-    config.include Eurocrat::Engine.routes.url_helpers, type: :routing
+    config.include Eurocrats::Engine.routes.url_helpers, type: :controller
+    config.include Eurocrats::Engine.routes.url_helpers, type: :routing
 
     # Run specs in random order to surface order dependencies. If you find an
     # order dependency and want to debug it, you can fix the order by providing
