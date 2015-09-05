@@ -36,6 +36,8 @@ group :test do
   # gem 'shoulda-callback-matchers'
   gem 'database_cleaner'
   # gem 'factory_girl_rails'
+
+  gem 'simplecov'
 end
 
 group :development, :test do
