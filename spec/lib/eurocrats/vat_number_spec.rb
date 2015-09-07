@@ -15,7 +15,7 @@ describe Eurocrats::VatNumber do
   end
 
   # TODO alias
-  describe '.is_valid?' do
+  xdescribe '.is_valid?' do
     it 'validates the VAT number existence without a requester' do
       expect(described_class).to receive(:validate).with number, nil, 'detail option'
       described_class.is_valid? number, 'detail option'
