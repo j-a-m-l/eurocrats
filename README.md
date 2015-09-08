@@ -13,6 +13,10 @@ Currently it includes these tools:
  * European VAT number validator (through [valvat](https://github.com/yolk/valvat/))
  * IP geo-location (through [Geocoder](https://github.com/alexreisner/geocoder/))
 
+Next:
+
+ * Exchange (through [Money]())
+
 
 Installation
 ============

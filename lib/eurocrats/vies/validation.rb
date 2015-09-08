@@ -3,6 +3,12 @@ require_relative '../vat_number'
 
 module Eurocrats
   module Vies
+    ##
+    # This class can connect to VIES and hold the data that VIES responds.
+    #
+    # Its main use case is storing the response that VIES provides as an evidence
+    # of the taxable status of a customer (if its VAT number exists).
+    #
     class Validation
 
       attr_reader :requester_vat_number

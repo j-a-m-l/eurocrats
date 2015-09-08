@@ -7,7 +7,13 @@ module Eurocrats
   # e-commerce => standard 
   # reduces is array
 
-  # TODO inherit from Country (countres gem)?
+  # TODO inherit from Country (countries gem)?
+
+  ##
+  # This Country class simplifies the handling of different country codes.
+  #
+  # It only converts any country code to the ISO 3166-1 alpha-2 equivalent.
+  #
   class Country
 
     class << self

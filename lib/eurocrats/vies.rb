@@ -1,19 +1,17 @@
-# VAT number
-#
-# Some incomplete validation rules:
-# http://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11
-#
-# VAT number validation through web interface:
-# http://ec.europa.eu/taxation_customs/vies/vatResponse.html
-#
-# Unavailability:
-# http://ec.europa.eu/taxation_customs/vies/viesspec.do
-# TODO provide alternative services
-#
 module Eurocrats
 
   class ViesError < StandardError; end
 
+  ##
+  # This module connects to the VAT Information Exchange Service (VIES).
+  #
+  # VAT number validation through web interface:
+  # http://ec.europa.eu/taxation_customs/vies/vatResponse.html
+  #
+  # Unavailability:
+  # http://ec.europa.eu/taxation_customs/vies/viesspec.do
+  # TODO provide alternative services
+  #
   module Vies
 
     # TODO timeouts

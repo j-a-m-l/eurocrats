@@ -12,9 +12,12 @@ module Eurocrats
   # * The VAT number of the customer (Taxable && Evidentiable)
   # * (In the future it could include if the customer has some kind of exemption)
   #
+  # This class could be seem as an interface for that functionality and could be replaced
+  # with anyone that includes the Taxable and Evidentiable modules.
+  #
   class Customer
 
-    # Some customers could be "taxable" persons
+    # Some customers could be taxable persons
     include Taxable
 
     # For collecting the evidences

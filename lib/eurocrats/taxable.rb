@@ -1,4 +1,9 @@
 module Eurocrats
+  ##
+  # This module provides functionality for taxable persons.
+  # Those are from whom governments collect VAT, like companies or freelancers,
+  # although they usually passed it on to their customers.
+  #
   module Taxable
 
     attr_reader :vat_number

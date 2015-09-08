@@ -5,6 +5,7 @@ require 'forwardable'
 
 module Eurocrats
 
+  ##
   # Context reunites the entities that could be used for determining, among other questions, these:
   #
   # * What are the evidences of the customer location?
