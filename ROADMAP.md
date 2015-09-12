@@ -4,47 +4,49 @@ This is a WIP and is not stable enough to use it as reference
 
 ## 2.0.0
 
- * VAT exemptions
- * VAT thresholds by country
- * Special (possibly non computable) evidences (without country code) like "Not in US"
  * SMS facility and Rails controller
 
 ## 1.0.0
 
- * VAT for autonomous regions
- * Special VAT rates
+ * VAT exemptions
+ * VAT thresholds by country
 
 ## 0.9.0
 
- * Advanced cache
+ * VAT for autonomous regions
+ * Special VAT rates
+ * VAT rates for future dates
+ * VAT rates for previous dates
 
 ## 0.8.0
 
- * Exchange Rails controller
+ * SAF-MOSS XML format
 
 ## 0.7.0
 
- * SAF-MOSS XML format
- * Invoicing?
+ * Invoicing rules / helpers for each country
 
 ## 0.6.0
 
-  * VAT rates for future dates
-  * VAT rates for previous dates
+ * Special (possibly non computable) evidences (without country code) like "Not in US"
+ * Basic cache
+ * Configurable cache
+ * Cache geo-locations
+ * Cache VIES requests
 
 ## 0.5.0
 
- * Documented with TODO
  * Published to RubyGems.org
+ * More tests
+ * Fully documented with RDoc
+ * Timeouts
 
 ## 0.4.0
 
- * Timeouts
- * Basic cache
- * Cache geo-locations for avoiding requests
- * Cache vat checkings for avoiding requests
+ * Persist contexts, evidences and VIES validations
 
 ## 0.3.0
 
-  * Currency conversion
-  * Persist contexts
+ * Currency conversion
+ * Exchange Rails controller
+ * Configurable default supplier
