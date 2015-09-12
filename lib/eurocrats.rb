@@ -31,7 +31,7 @@ module Eurocrats
   mattr_accessor :debug
   @@debug = false
 
-  # Supplier data
+  # This supplier will be used, by default, in VIES validations through `Context` and the included `VatNumbersController`, as the requester
   mattr_accessor :default_supplier
 
   mattr_accessor :country_codes

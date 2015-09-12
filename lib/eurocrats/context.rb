@@ -29,11 +29,14 @@ module Eurocrats
 
     # TODO options...
     def initialize supplier=nil, customer=nil
-      @evidences = {}
+      @supplier ||= supplier ||= Eurocrats.default_supplier
 
-      # TODO default supplier
-      @supplier ||= supplier ||= Eurocrats::Supplier.new
+      unless @supplier.is_a? Eurocrats::Taxable
+        raise TypeError.new 'Supplier has to include Eurocrats::Taxable'
+      end
+
       @customer ||= customer ||= Eurocrats::Customer.new
+      @evidences = {}
 
       # TODO default rate
       @rate = 'standard'
@@ -200,6 +203,6 @@ module Eurocrats
 
   end
 
-  class Eurocrats::ConflictingEvidencesError < StandardError; end
+  class ConflictingEvidencesError < StandardError; end
 
 end

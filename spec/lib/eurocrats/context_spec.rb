@@ -18,7 +18,38 @@ describe Eurocrats::Context do
     expect(subject).to receive(:evidences).and_return(evidences).at_least(:once)
   }
 
+  subject { described_class.new Eurocrats::Supplier.new }
+
   describe 'initialize' do
+
+    let(:example_supplier) { Eurocrats::Supplier.new }
+
+    context 'receiving and explicit supplier' do
+      it 'uses it' do
+        expect(described_class.new(example_supplier).supplier).to be example_supplier
+      end
+
+      context 'that is not a Taxable instance' do
+        it 'raises an error' do
+          expect { described_class.new 'NotTaxable' }.to raise_error TypeError, /taxable/i
+        end
+      end
+    end
+
+    context 'without receiving and explicit supplier' do
+      context 'having a default supplier' do
+        it 'uses it' do
+          Eurocrats.default_supplier = example_supplier
+          expect(described_class.new.supplier).to be example_supplier
+        end
+      end
+
+      context 'and without having a default supplier' do
+        it 'raises an error' do
+          expect { described_class.new }.to raise_error TypeError, /taxable/i
+        end
+      end
+    end
   end
 
   describe '#evidences' do
