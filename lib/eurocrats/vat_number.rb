@@ -23,6 +23,12 @@ module Eurocrats
     attr_reader :number
     attr_reader :country_code
 
+    # This method has been overridden to treat 2 different instances, but with
+    # the same inner value, as equal
+    def == other
+      to_s == other.to_s
+    end
+
     # TODO raise if doesn't exist?
     def initialize vat_number
       @vat_number = vat_number

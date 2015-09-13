@@ -59,6 +59,26 @@ describe Eurocrats::VatNumber do
     
   end
 
+  describe '#==' do
+    let(:subject) { described_class.new requester_vat_number }
+
+    context 'same VAT number' do
+      let(:other) { described_class.new requester_vat_number }
+
+      it 'returns true (of course!)' do
+        expect(subject == other).to be true
+      end
+    end
+
+    context 'different VAT number' do
+      let(:other) { described_class.new customer_vat_number }
+
+      it 'returns false (of course!)' do
+        expect(subject == other).to be false
+      end
+    end
+  end
+
   describe '#initialize' do
   end
 
