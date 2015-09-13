@@ -56,10 +56,16 @@ describe Eurocrats::VatNumbersController do
         expect(assigns :valid).to eq validation_result
       end
 
-      xcontext 'with the default supplier' do
+      context 'with the default supplier' do
+        it 'TODO' do
+          pending
+        end
       end
 
-      xcontext 'with a supplier' do
+      context 'with a supplier' do
+        it 'TODO' do
+          pending
+        end
       end
     end
   end

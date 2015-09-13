@@ -20,7 +20,7 @@ Next:
 
 Installation
 ============
-TODO
+ * This gem is not in RubyGems.org yet.
 
 ```
 gem install eurocrats

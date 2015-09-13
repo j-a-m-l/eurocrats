@@ -1,4 +1,5 @@
 describe Eurocrats::Vies::Validation do
+
   let(:valid_a) { 'IE6388047V' }
   let(:valid_b) { 'LU21416127' }
   let(:invalid_a) { 'LU121' }
