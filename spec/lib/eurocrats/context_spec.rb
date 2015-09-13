@@ -38,15 +38,18 @@ describe Eurocrats::Context do
 
     context 'without receiving and explicit supplier' do
       context 'having a default supplier' do
+        before(:each) { Eurocrats.default_supplier = example_supplier }
+
         it 'uses it' do
-          Eurocrats.default_supplier = example_supplier
           expect(described_class.new.supplier).to be example_supplier
         end
       end
 
       context 'and without having a default supplier' do
+        before(:each) { Eurocrats.default_supplier = nil }
+
         it 'raises an error' do
-          expect { described_class.new }.to raise_error TypeError, /taxable/i
+          expect { described_class.new }.to raise_error ArgumentError, /supplier/i
         end
       end
     end

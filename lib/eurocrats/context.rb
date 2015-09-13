@@ -31,6 +31,8 @@ module Eurocrats
     def initialize supplier=nil, customer=nil
       @supplier ||= supplier ||= Eurocrats.default_supplier
 
+      raise ArgumentError.new 'A supplier is required' unless @supplier
+
       unless @supplier.is_a? Eurocrats::Taxable
         raise TypeError.new 'Supplier has to include Eurocrats::Taxable'
       end
@@ -45,6 +47,7 @@ module Eurocrats
       @minimum = 2
     end
 
+    # TODO evidences[]= like []=
     def evidences
       @evidences.merge(customer.collect_eurocrats_evidences)
     end
@@ -148,7 +151,7 @@ module Eurocrats
       nil
     end
 
-    # If customer is in the same country than supplier, it should be charged
+    # If customer is in the same country than supplier, it should be charged.
     # Then, the supplier must pay that collected VAT to her tax authorities,
     # although she could deduct her paid VAT
     # => true
