@@ -1,4 +1,4 @@
-describe Eurocrats::VatNumbersController do
+describe Eurocrats::VatNumberValidationsController do
 
   routes { Eurocrats::Engine.routes }
 

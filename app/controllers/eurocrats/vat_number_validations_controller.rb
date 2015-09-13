@@ -4,7 +4,7 @@ module Eurocrats
   ##
   # This controller performs VAT validations through VIES
   #
-  class VatNumbersController < ApplicationController
+  class VatNumberValidationsController < ApplicationController
 
     # TODO GET /vat-numbers/:vat_number/valid
     # TODO GET /vat-number-validation/:vat_number

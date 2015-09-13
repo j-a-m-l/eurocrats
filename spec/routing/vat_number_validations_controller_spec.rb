@@ -1,4 +1,4 @@
-describe Eurocrats::VatNumbersController do
+describe Eurocrats::VatNumberValidationsController do
 
   routes { Eurocrats::Engine.routes }
 
@@ -13,7 +13,7 @@ describe Eurocrats::VatNumbersController do
 
     it 'to #show' do
       expect(get vat_number_validation_path vat_number)
-        .to route_to 'eurocrats/vat_numbers#show', params.merge(vat_number: vat_number)
+        .to route_to 'eurocrats/vat_number_validations#show', params.merge(vat_number: vat_number)
     end
   end
 
