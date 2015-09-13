@@ -32,7 +32,23 @@ module Eurocrats
   @@debug = false
 
   # This supplier will be used, by default, in VIES validations through `Context` and the included `VatNumbersController`, as the requester
-  mattr_accessor :default_supplier
+  mattr_reader :default_supplier
+
+  def self.default_supplier= data
+    case data
+      when Supplier
+        @@default_supplier = data
+
+      when Hash
+        @@default_supplier = Supplier.new
+        @@default_supplier.vat_number = data['vat_number'] if data.has_key? 'vat_number'
+        @@default_supplier.vat_number = data[:vat_number] if data.has_key? :vat_number
+
+      else raise ArgumentError.new 'Default supplier should be configured from Supplier or Hash object'
+    end
+
+    @@default_supplier
+  end
 
   mattr_accessor :country_codes
   @@country_codes = {}
