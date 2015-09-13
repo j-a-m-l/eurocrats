@@ -6,9 +6,7 @@ module Eurocrats
   #
   class VatNumberValidationsController < ApplicationController
 
-    # TODO GET /vat-numbers/:vat_number/valid
-    # TODO GET /vat-number-validation/:vat_number
-    # GET /vat-numbers/:vat_number
+    # GET /vat-number-validations/:vat_number
     #
     # TODO return errors
     #

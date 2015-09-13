@@ -5,7 +5,7 @@ describe Eurocrats::VatNumberValidationsController do
   let(:vat_number) { 'XX12345678' }
 
   describe 'paths' do
-    it { expect(vat_number_validation_path vat_number).to eq "/vat-numbers/#{vat_number}" }
+    it { expect(vat_number_validation_path vat_number).to eq "/vat-number-validations/#{vat_number}" }
   end
 
   context 'JSON format' do
