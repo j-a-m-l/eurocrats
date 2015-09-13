@@ -24,7 +24,6 @@ module Eurocrats
       Valvat::Lookup.validate number, requester_vat: requester, detail: detail
     end
 
-    # TODO merge with ^
     def self.validate_vat_number! number, requester=nil, detail=false
       Valvat::Lookup.validate number, requester_vat: requester, detail: detail, raise_error: true
     end

@@ -46,7 +46,7 @@ describe Eurocrats::Context do
       end
 
       context 'and without having a default supplier' do
-        before(:each) { Eurocrats.default_supplier = nil }
+        before(:each) { Eurocrats.class_variable_set :@@default_supplier, nil }
 
         it 'raises an error' do
           expect { described_class.new }.to raise_error ArgumentError, /supplier/i
