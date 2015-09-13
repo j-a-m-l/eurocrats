@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.2.4 (2015-09-13) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Use the default supplier for validating VAT numbers in `VATNumberValidationsController#show`
+ * Add more tests to `VATNumberValidationsController#show`
+ * Change VAT number validation URL to '/vat-number-validations/:vat_number'
+ * Rename `VATNumbersController` to `VATNumberValidationsController`
+
 ## 0.2.3 (2015-09-13) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Configurable default supplier

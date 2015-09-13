@@ -22,9 +22,13 @@ Other possible improvements:
 
 ## 1.0.0
 
-This version should include a full API review and change things like:
+This version should include a full API review and improvements things like:
 
  * `Context#evidences[...] = ...` behaves like `Context#[...] = ...`
+ * Configurable default rate in `Eurocrats` or in `Context` instances
+ * Configurable number of minimum evidences in `Context` instances
+ * Allow returning additional data, like address or company type, in `VATNumberValidationsController#show`
+ * Improve controller security limiting petitions, adding delays or things like that?
 
 ## 0.9.0
 
@@ -64,8 +68,5 @@ This version should add some tools for invoicing, like:
 
 ## 0.3.0
 
- * Configurable default rate
  * `eurocrats` method for Rails controllers
  * Options for testing local Rack requests
- * `VATNumbersController` responses
- * VAT number validation routes to `VATNumbersController`

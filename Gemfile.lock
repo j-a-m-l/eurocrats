@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    eurocrats (0.2.3)
+    eurocrats (0.2.4)
       countries
       jbuilder
       rails (~> 4.2.0)
