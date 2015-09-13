@@ -25,11 +25,12 @@ module Eurocrats
     def show
       @valid = Eurocrats::Vies.validate_vat_number! requester_vat_number, vat_number_param
 
+    # Raised with empty parameter
     rescue ActionController::ParameterMissing
       head :bad_request
 
-      # TODO Add error codes or messages
-      # TODO optional logging
+    # TODO Add error codes or messages
+    # TODO optional error logging
     rescue => e
       @valid = nil
     end
