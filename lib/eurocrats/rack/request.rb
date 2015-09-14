@@ -1,20 +1,31 @@
 module Eurocrats
+
+  class TestLocationError < StandardError; end
+
+  # This module accessor is only useful for mocking the IP location evidence, that
+  # is captured in `Rack::Request#eurocrats` when that IP address is local.
+  # Something like `Eurocrats.test_location = { country_code: 'US' }` could be
+  # enough in most cases.
+  mattr_accessor :test_location
+
   module Rack
     module Request
 
-      # TODO arguments
-      # TODO docs
-      # It uses Geocoder `safe_location`
-      # ip_lookup option
+      # This method instantiates an Eurocrat::Context the first time is invoked.
+      #
+      # It uses Geocoder `safe_location` for geo-locating the request IP address.
+      # Then, that location is added as an evidence ('eurocrats.request.ip_location')
+      # to the context. In case the IP is a loopback address, it uses
+      # `Eurocrats.test_location` instead, so it should usually be configured
+      # for testing or developing purposes.
       def eurocrats supplier=nil, customer=nil
         @eurocrats ||= begin
           context = Eurocrats::Context.new supplier, customer
 
-          # TODO configurable for testing
-          if safe_location.country == 'Reserved'
-            context['eurocrats.request.ip_location'] = 'PT'
+          context['eurocrats.request.ip_location'] = if Geocoder::IpAddress.new(ip).loopback?
+            Eurocrats.test_location or raise Eurocrats::TestLocationError.new '`Eurocrats.test_location` is not configured'
           else
-            context['eurocrats.request.ip_location'] = safe_location
+            safe_location
           end
 
           context
