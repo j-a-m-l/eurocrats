@@ -29,8 +29,6 @@ module Eurocrats
     rescue ActionController::ParameterMissing
       head :bad_request
 
-    # TODO Add error codes or messages
-    # TODO optional error logging
     rescue => e
       @valid = nil
     end

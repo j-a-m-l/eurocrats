@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.3.0 (2015-09-14) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Document in the README the way `request.eurocrats` works.
+ * Option for mocking local Rack request IP locations
+ * Tests for Eurocrats::Rack::Request
+
 ## 0.2.4 (2015-09-13) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Use the default supplier for validating VAT numbers in `VATNumberValidationsController#show`
