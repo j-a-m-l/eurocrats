@@ -23,5 +23,9 @@ module Eurocrats
     # For collecting the evidences
     include Evidentiable
 
+    def initialize data={}
+      self.vat_number = data[:vat_number] if data.has_key? :vat_number
+    end
+
   end
 end
