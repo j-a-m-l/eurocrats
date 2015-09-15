@@ -19,7 +19,7 @@ describe Eurocrats::Rack::Request do
   describe '#eurocrats' do
     before(:each) { Eurocrats.default_supplier = {} }
 
-    let(:evidence_country_code) { subject.eurocrats['eurocrats.request.ip_location'].country_code }
+    let(:evidence_country_code) { subject.eurocrats['ip_location'].country_code }
 
     it 'returns a new Context the first time is called'
 
@@ -28,7 +28,7 @@ describe Eurocrats::Rack::Request do
     context 'request IP is not loopback' do
       subject { MockRequest.new '27.10.0.1' }
 
-      it 'uses `safe_location` for setting the "eurocrats.request.ip_location" evidence' do
+      it 'uses `safe_location` for setting the "ip_location" evidence' do
         country_code = 'RU'
         expect(subject).to receive(:safe_location).and_return country_code
         expect(evidence_country_code).to eq country_code
@@ -41,7 +41,7 @@ describe Eurocrats::Rack::Request do
       context 'with `Eurocrats.test_location`' do
         before(:each) { Eurocrats.test_location = { country_code: 'CA' } }
 
-        it 'uses it for setting the "eurocrats.request.ip_location" evidence' do
+        it 'uses it for setting the "ip_location" evidence' do
           expect(evidence_country_code).to eq Eurocrats.test_location[:country_code]
         end
       end
