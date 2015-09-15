@@ -16,6 +16,9 @@ gemspec
 # Only with Rack, and optional
 gem 'geocoder'
 
+# Only for Rails
+gem 'jbuilder'
+
 group :development do
   gem 'spork'
 

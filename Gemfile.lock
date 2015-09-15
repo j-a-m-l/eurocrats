@@ -251,6 +251,7 @@ DEPENDENCIES
   guard-rails
   guard-rspec
   guard-spork
+  jbuilder
   pry
   rack-test
   rspec
