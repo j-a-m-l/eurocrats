@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.3.4 (2015-09-15) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Rename 'eurocrats.request.ip_location' evidence to 'ip_location'.
+ * Move `TestLocationError` to `lib/eurocrats/error.rb` and change its parent to `Eurocrats::Error`.
+
 ## 0.3.3 (2015-09-15) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Add 2 complex examples of using Context for collecting money.
