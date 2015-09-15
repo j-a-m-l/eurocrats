@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.3.2 (2015-09-15) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * All exceptions inherit from Eurocrats::Error.
+ * Add `jbuilder` in the Gemfile again, so Rails loads it for rendering JSON.
+ * Rename `Eurocrats::VatNumber::InvalidError` to `Eurocrats::InvalidVatNumberError`.
+ * Replace `Eurocrats::UnavailableCountryCodeError` `Eurocrats::InvalidVatNumberError`.
+
 ## 0.3.1 (2015-09-15) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Add `money` as dependency.

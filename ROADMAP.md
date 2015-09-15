@@ -73,7 +73,6 @@ This version should add some tools for invoicing, like:
 ## 0.4.0
 
  * Fix some Eurocrats methods.
- * All exceptions inherit from Eurocrats::Error.
  * Complex example of using Context for collecting money.
  * Example with ad hoc Supplier and Customer classes.
  * Example of using Context for listing prices with VAT for a specific user.

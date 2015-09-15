@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    eurocrats (0.3.1)
+    eurocrats (0.3.2)
       countries
       eu_central_bank
       jbuilder
