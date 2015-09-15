@@ -14,13 +14,20 @@ Gem::Specification.new do |s|
   s.description = "TODO: Description of eurocrats."
   s.license     = "MIT"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency 'rails', '~> 4.2.0'
-  s.add_dependency 'jbuilder'
+  # 
   s.add_dependency 'countries'
   s.add_dependency 'valvat'
+
+  s.add_dependency 'money'
+  s.add_dependency 'eu_central_bank'
+
+  # Rails only
+  s.add_dependency 'rails', '~> 4.2.0'
+  s.add_dependency 'jbuilder'
+
   s.add_development_dependency 'sqlite3'
 
 end

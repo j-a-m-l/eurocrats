@@ -13,9 +13,8 @@ gemspec
 # To use debugger
 # gem 'debugger'
 
-gem 'jbuilder'
+# Only with Rack, and optional
 gem 'geocoder'
-gem 'countries'
 
 group :development do
   gem 'spork'
