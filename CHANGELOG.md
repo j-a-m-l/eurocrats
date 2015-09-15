@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.3 (2015-09-15) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Add 2 complex examples of using Context for collecting money.
+
 ## 0.3.2 (2015-09-15) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * All exceptions inherit from Eurocrats::Error.
@@ -11,7 +15,7 @@
 
  * Add `money` as dependency.
  * Add `eu_central_bank` as dependency.
- * Simple example of using Context for collecting money.
+ * Add a simple example of using Context for collecting money.
  * Initialize a `Customer` with its VAT number.
 
 ## 0.3.0 (2015-09-14) Juan A. Martín Lucas <eurocrats@jaml.site>
