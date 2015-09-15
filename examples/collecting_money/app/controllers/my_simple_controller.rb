@@ -10,10 +10,14 @@ class MySimpleController < ApplicationController
   # Several things could raise an Eurocrats::Error while is determining the
   # evidenced country:
   #  * The 2 evidences (IP address and billing address) do not match
-  #  * The VIES validation fails
+  #  * The VIES validation fails (connection error, invalid VAT number, etc.)
   #  * The billing address has a country code that does not exist
   rescue Eurocrats::Error
-    @epic_fail = true
+    @epic_fail = :maybe
+
+  # Other errors
+  rescue MyPayment::Error
+    @epic_fail = :yeah
   end
   
   private
@@ -24,18 +28,17 @@ class MySimpleController < ApplicationController
     # It includes 2 evidences, one explicit ("billing_address") and other, the
     # IP address, that has been captured by `request.eurocrats` already
     def eurocrats
-      customer = Eurocrats::Customer.new
-      customer.vat_number = vat_number_param if vat_number_param
+      customer = Eurocrats::Customer.new customer_params
 
       request.eurocrats Eurocrats.default_supplier, customer
-      request.eurocrats['billing_address'] = billing_address_param
+      request.eurocrats['billing_address'] = billing_address_params
     end
 
-    def billing_address_param
+    def billing_address_params
       params.require :billing_address, :country_code
     end
 
-    def vat_number_param
+    def customer_params
       params.require :customer, :vat_number
     end
 
