@@ -1,8 +1,5 @@
 module Eurocrats
 
-  # FIXME
-  class TestLocationError < StandardError; end
-
   # This module accessor is only useful for mocking the IP location evidence, that
   # is captured in `Rack::Request#eurocrats` when that IP address is local.
   # Something like `Eurocrats.test_location = { country_code: 'US' }` could be

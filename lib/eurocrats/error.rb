@@ -15,4 +15,7 @@ module Eurocrats
   # VAT number syntax is invalid.
   class InvalidVatNumberError < Error; end
 
+  # Warns about using the Eurocrats::Rack::Request with loopback addresses
+  class TestLocationError < Error; end
+
 end
