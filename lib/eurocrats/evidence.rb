@@ -7,8 +7,6 @@ module Eurocrats
   #
   class Evidence
 
-    class UnavailabeCountryCodeError < StandardError; end
-
     # TODO use method with Regex
     COUNTRY_CODE_KEYS = %w[
       country_code_alpha2
@@ -32,7 +30,7 @@ module Eurocrats
         end
 
         # TODO class
-        raise UnavailabeCountryCodeError
+        raise InvalidCountryCodeError
       end
 
       # Tries to recognize an acceptable country code

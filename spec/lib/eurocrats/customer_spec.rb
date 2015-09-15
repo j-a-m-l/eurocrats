@@ -13,7 +13,7 @@ describe Eurocrats::Customer do
           let(:data) { { vat_number: 'example' } }
 
           it 'raises error' do
-            expect { described_class.new data }.to raise_error Eurocrats::VatNumber::InvalidError
+            expect { described_class.new data }.to raise_error Eurocrats::InvalidVatNumberError
           end
         end
       end

@@ -1,7 +1,5 @@
 module Eurocrats
 
-  class ViesError < StandardError; end
-
   ##
   # This module connects to the VAT Information Exchange Service (VIES).
   #

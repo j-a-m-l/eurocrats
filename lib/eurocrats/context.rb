@@ -72,9 +72,6 @@ module Eurocrats
     # some evidences or ignoring others, you should be able to achieve that just
     # overriding this method in an inherited Context class
     #
-    # TODO example with billing_address, ip and credit card
-    # TODO example with billing_address, ip, credit card and phone
-    #
     def non_conflicting_location_evidences
       return only_location_evidences if only_location_evidences.size == 1
 
@@ -145,7 +142,7 @@ module Eurocrats
       @evidences[VIES_EVIDENCE_LABEL] = Vies::Validation.new(@supplier, @customer).request!
     end
 
-    # TODO If supplier or customer change their VAT this should be updated
+    # TODO If supplier or customer change their VAT numbers (quite silly case) this should be updated
     def valid_vat_numbers?
       return evidences[VIES_EVIDENCE_LABEL].valid? if evidences.has_key? VIES_EVIDENCE_LABEL
       nil
@@ -194,6 +191,11 @@ module Eurocrats
       amount * vat_for(amount, rate)
     end
 
+    # TODO default currency
+    # TODO default currency from MoneyRails
+    def exchange amount, from, to
+    end
+
     def open &block
       instance_eval &block
     end
@@ -205,7 +207,5 @@ module Eurocrats
       end
 
   end
-
-  class ConflictingEvidencesError < StandardError; end
 
 end

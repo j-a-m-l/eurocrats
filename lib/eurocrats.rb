@@ -2,6 +2,7 @@ require 'valvat'
 require 'geocoder'
 require 'countries'
 
+require_relative './eurocrats/error'
 require_relative './eurocrats/country'
 require_relative './eurocrats/evidence'
 require_relative './eurocrats/vat_number'

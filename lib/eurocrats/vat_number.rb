@@ -13,8 +13,6 @@ module Eurocrats
   #
   class VatNumber
 
-    class InvalidError < StandardError; end
-
     def self.seems_valid? vat_number
       Valvat::Syntax.validate vat_number
     end
@@ -32,7 +30,10 @@ module Eurocrats
     # TODO raise if doesn't exist?
     def initialize vat_number
       @vat_number = vat_number
-      raise InvalidError.new "\"#@vat_number\" is not a valid VAT number" unless seems_valid?
+
+      unless seems_valid?
+        raise ::Eurocrats::InvalidVatNumberError.new "\"#@vat_number\" is not a valid VAT number"
+      end
     end
 
     # Grece VAT country code is "EL", but their ISO 3166-1 alpha-2 country code is "GR"
