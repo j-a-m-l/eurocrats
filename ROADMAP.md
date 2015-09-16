@@ -63,6 +63,7 @@ This version should include a full API review and small improvements like:
 ## 0.6.0
 
  * Persist contexts, evidences and VIES validations?
+ * Example with ad hoc Supplier and Customer classes.
  * Integrate the `valvat` VAT number validator.
  * Capture evidences from a class that includes `Evidentiable`
 
@@ -78,8 +79,6 @@ This version should include a full API review and small improvements like:
 ## 0.4.0
 
  * Fix some Eurocrats methods.
- * Example with ad hoc Supplier and Customer classes.
- * Example of using Context for listing prices with VAT for a specific user.
  * Remove several `Context` methods that provide functionality that could be used through the `evidence` method.
  * Add functionality to the `Evidence` class.
  * Add a new `evidence` method to `Context`.
