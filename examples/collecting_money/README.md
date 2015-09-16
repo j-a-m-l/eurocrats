@@ -5,5 +5,5 @@ That configuration is used later (`Eurocrats.defaul_supplier`) in the controller
 
 app/controllers/my_simple_controller.rb
 ---------------------------------------
-This controller executes a payment, using an invented `MyPayment` class for performing it.
+This controller executes a payment, using a fake `MyPayment` class for performing it.
 If it fails it does not handle all different errors.

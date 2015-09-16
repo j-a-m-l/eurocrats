@@ -5,7 +5,7 @@ class MySimpleController < ApplicationController
     # Adds the VAT if necessary (and determines the country if has not been done)
     total_amount = eurocrats.with_vat product.price
 
-    @transaction = MyPayment.authorize_and_settle! total_amount
+    @transaction = MyPayment.authorize_only!(total_amount).collect_money!
 
   # Several things could raise an Eurocrats::Error while is determining the
   # evidenced country:
@@ -15,7 +15,7 @@ class MySimpleController < ApplicationController
   rescue Eurocrats::Error
     @epic_fail = :maybe
 
-  # Other errors
+  # Other errors that do not depend on Eurocrats
   rescue MyPayment::Error
     @epic_fail = :yeah
   end
