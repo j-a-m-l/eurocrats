@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.6 (2015-09-16) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Add functionality to the `Evidence` class (`country` and `vat_rates` methods).
+
 ## 0.3.5 (2015-09-16) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Example of using `Context` for listing prices with VAT for a specific user.

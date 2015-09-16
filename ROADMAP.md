@@ -75,12 +75,12 @@ This version should include a full API review and small improvements like:
  * Save updates rates to a file.
  * Load updates rates from a file.
  * Exchange examples.
+ * Use `BigDecimal` for calculations.
 
 ## 0.4.0
 
  * Fix some Eurocrats methods.
  * Remove several `Context` methods that provide functionality that could be used through the `evidence` method.
- * Add functionality to the `Evidence` class.
  * Add a new `evidence` method to `Context`.
  * Update the examples to use the `Context#evidence` interface instead of the previous methods.
  * `Context#evidences[...] = ...` should behave like `Context#[...] = ...`.
