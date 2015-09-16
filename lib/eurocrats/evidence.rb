@@ -29,8 +29,7 @@ module Eurocrats
           return new(country_code, hash) if country_code
         end
 
-        # TODO class
-        raise InvalidCountryCodeError
+        raise InvalidCountryCodeError.new 'No available country code key'
       end
 
       # Tries to recognize an acceptable country code
@@ -41,8 +40,7 @@ module Eurocrats
           end
         end
 
-        # TODO class
-        raise StandardError
+        raise InvalidCountryCodeError.new 'No available country code method'
       end
 
       def from source
@@ -70,6 +68,16 @@ module Eurocrats
       # TODO dup && freeze the source?
       @country_code, @source = Country.to_alpha2(country_code), source
       @collected_at = DateTime.now
+    end
+
+    # Returns the Country (as object) of this evidence
+    def country
+      ISO3166::Country[@country_code]
+    end
+
+    # Returns a Hash with the VAT rates that are applied to the country of this evidence
+    def vat_rates
+      country.vat_rates
     end
 
   end

@@ -1,5 +1,8 @@
 describe Eurocrats::Evidence do
-  let(:country_code) { 'country code' }
+
+  let(:country_code) { 'IT' }
+
+  subject { described_class.new country_code, 'example' }
 
   describe '.from_country_code' do
     context 'receiving a country code' do
@@ -31,7 +34,7 @@ describe Eurocrats::Evidence do
       let(:source) { { :a_key => 'example', 'other' => country_code } }
 
       it 'raises an error' do
-        expect { described_class.from_hash source }.to raise_error
+        expect { described_class.from_hash source }.to raise_error Eurocrats::InvalidCountryCodeError, /country.*key/
       end
     end
   end
@@ -56,7 +59,7 @@ describe Eurocrats::Evidence do
       let(:source) { Struct.new(:a_key, :unknown).new 'example', country_code }
 
       it 'raises an error' do
-        expect { described_class.from_object source }.to raise_error
+        expect { described_class.from_object source }.to raise_error Eurocrats::InvalidCountryCodeError, /country.*method/
       end
     end
   end
@@ -66,8 +69,6 @@ describe Eurocrats::Evidence do
   end
 
   describe '#initialize' do
-
-    let(:country_code) { 'CH' }
     let(:source) { 'example source' }
 
     it 'establish the country code' do
@@ -86,5 +87,33 @@ describe Eurocrats::Evidence do
 
   # TODO country_code reader
   # TODO data reader
+  
+  describe '#country' do
+    let(:country) { ISO3166::Country[country_code] }
+
+    it 'returns the Country' do
+      expect(subject.country).to be_a ISO3166::Country
+      expect(subject.country).to eq country
+    end
+  end
+  
+  describe '#vat_rates' do
+    let(:vat_rates) { ISO3166::Country[country_code].vat_rates }
+
+    context 'country applies VAT' do
+      it 'returns the VAT rates of the country' do
+        expect(subject.vat_rates).to be_a Hash
+        expect(subject.vat_rates).to eq vat_rates
+      end
+    end
+
+    context 'country do not apply VAT' do
+      let(:country_code) { 'MX' }
+
+      it 'returns Hash or nil? Or raises?' do
+        pending
+      end
+    end
+  end
 
 end
