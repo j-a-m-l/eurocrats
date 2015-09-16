@@ -1,0 +1,9 @@
+<ul>
+  <% @products.each do |product| %>
+    <li class='product'>
+      Price: <%= product.price %>
+      VAT: <%= product.price * (1 + @vat_rate) %>
+      Price with VAT: <%= product.price_with_vat @vat_rate %>
+    </li>
+  <% end %>
+</ul>
