@@ -51,9 +51,10 @@ module Eurocrats
     def evidences
       @evidences.merge(customer.collect_eurocrats_evidences)
     end
+    alias evidence evidences
 
     def [] label
-      evidences[label]
+      evidences[label] or raise InvalidEvidenceError.new 'Evidence does not exist'
     end
 
     def []= label, source
@@ -93,13 +94,17 @@ module Eurocrats
     end
     alias conflicts conflicting_location_evidences
 
+    # TODO
     def favorable_evidences? label_a, label_b
       not conflicting_evidences?
     end
+    alias favorable? favorable_evidences?
 
+    # TODO more than 2 evidences
     def conflicting_evidences? label_a, label_b
       evidences[label_a].country_code != evidences[label_b].country_code
     end
+    alias conflicting? conflicting_evidences?
 
     def enough_evidences?
       unless evidences.empty?
@@ -110,6 +115,7 @@ module Eurocrats
     end
     alias enough? enough_evidences?
 
+    # TODO remove, but add .code to Country
     def evidenced_country_code
       unless non_conflicting_location_evidences.size >= @minimum
         raise ConflictingEvidencesError.new 'Operation requires enough non conflicting evidences'
@@ -124,14 +130,19 @@ module Eurocrats
     end
     alias country evidenced_country
 
+    # returns country code
+    # TODO remove
     def country_code_of evidence_label
       evidences[evidence_label].country_code
     end
 
+    # returns Country object
+    # TODO remove
     def country_of evidence_label
       Eurocrats.country evidences[evidence_label].country_code
     end
 
+    # Are Supplier and Customer European taxable persons? (They have an European VAT number)
     def taxables?
       @supplier.taxable? && @customer.taxable?
     end
@@ -142,14 +153,16 @@ module Eurocrats
       @evidences[VIES_EVIDENCE_LABEL] = Vies::Validation.new(@supplier, @customer).request!
     end
 
-    # TODO If supplier or customer change their VAT numbers (quite silly case) this should be updated
     def valid_vat_numbers?
       return evidences[VIES_EVIDENCE_LABEL].valid? if evidences.has_key? VIES_EVIDENCE_LABEL
       nil
     end
 
-    # If customer is in the same country than supplier, it should be charged.
-    # Then, the supplier must pay that collected VAT to her tax authorities,
+    # If Supplier and Customer are taxables, it checks that both VAT numbers are
+    # valid and creates a new evidence that holds the VIES validation response.
+    # If Customer is in the same country than Supplier, even being taxables, VAT
+    # should be charged.
+    # Then, the Supplier must pay that collected VAT to her tax authorities,
     # although she could deduct her paid VAT
     # => true
     # => false
@@ -163,20 +176,28 @@ module Eurocrats
         false
       end
     end
+    alias charge_vat? should_vat_be_charged?
 
-    def vat_rates
+    def evidenced_vat_rates
       evidenced_country.vat_rates
     end
+    alias vat_rates evidenced_vat_rates
 
+    # TODO move to Country or remove
     def vat_rates_in country_code
       Eurocrats.country(country_code).vat_rates
     end
 
-    def vat_rates_of evidence_label
-      country_of(evidence_label).vat_rates
+    # TODO vat_for in Evidence?
+    def vat_of evidence_label, amount, rate=nil
+      if should_vat_be_charged?
+      else
+        0
+      end
     end
 
     # TODO add the "as" method to Numeric objects
+    # TODO admit Numeric as rate
     def vat_for amount, rate=nil
       if should_vat_be_charged?
         rate ||= @rate
@@ -185,10 +206,12 @@ module Eurocrats
         0
       end
     end
+    alias vat vat_for
 
+    # Adds the VAT if necessary.
     # TODO add the "as" method to Numeric objects
     def with_vat amount, rate=nil
-      amount * vat_for(amount, rate)
+      amount + amount * vat_for(amount, rate)
     end
 
     # TODO default currency

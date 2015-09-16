@@ -59,7 +59,24 @@ describe Eurocrats::Context do
     it 'collects the customer evidences'
   end
 
+  describe '#evidence' do
+  end
+
   describe '#[]' do
+    context 'receiving an existent label' do
+      let(:evidence) { Eurocrats::Evidence.from 'IT' }
+
+      it 'returns the evidence with that label' do
+        subject['yeah'] = evidence
+        expect(subject['yeah']).to eq evidence
+      end
+    end
+
+    context 'receiving an unknown label' do
+      it 'raises an error' do
+        expect { subject['lol'] }.to raise_error Eurocrats::InvalidEvidenceError, /evidence.*exist/i
+      end
+    end
   end
 
   describe '#[]=' do
@@ -184,6 +201,8 @@ describe Eurocrats::Context do
   # TODO alias
   describe '#taxables?' do
   end
+  describe '#b2b?' do
+  end
 
   describe '#validate_on_vies!' do
   end
@@ -196,7 +215,11 @@ describe Eurocrats::Context do
 
   describe '#should_vat_be_charged?' do
   end
+  describe '#charge_vat?' do
+  end
 
+  describe '#evidenced_vat_rates' do
+  end
   describe '#vat_rates' do
   end
 
