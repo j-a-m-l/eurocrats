@@ -64,8 +64,8 @@ describe Eurocrats::Evidence do
     end
   end
 
+  # TODO
   describe '.from' do
-    
   end
 
   describe '#initialize' do
@@ -114,6 +114,79 @@ describe Eurocrats::Evidence do
         pending
       end
     end
+  end
+
+  describe '#vat_for_current_context' do
+    context 'belonging to a Context' do
+      let(:context_double) {
+        instance_double Eurocrats::Context
+      }
+
+      before(:each) { subject.context = context_double }
+
+      it 'checks if the VAT should be charged' do
+        expect(context_double).to receive(:should_vat_be_charged?)
+        subject.vat_for_current_context
+      end
+
+      context 'VAT should not be charged' do
+        it 'returns zero' do
+          expect(context_double).to receive(:should_vat_be_charged?).and_return false
+          expect(subject.vat_for_current_context).to eq 0
+        end
+      end
+
+      context 'VAT should be charged' do
+        let(:default_rate_name) { 'yeah' }
+        let(:example_rates) { { default_rate_name => BigDecimal(0.20, 2) } }
+
+        describe 'without receiving any specific rate' do
+          it 'returns the VAT for the default rate of the Context' do
+            expect(context_double).to receive(:should_vat_be_charged?).and_return true
+            expect(context_double).to receive(:default_rate).and_return default_rate_name
+            expect(subject).to receive(:vat_rates).and_return example_rates
+
+            expect(subject.vat_for_current_context).to eq example_rates[default_rate_name]
+          end
+        end
+
+        describe 'receiving a specific rate' do
+        end
+      end
+    end
+
+    context 'not belonging to any Context' do
+      it 'raises an error' do
+        expect { subject.vat_for_current_context }.to raise_error Eurocrats::EvidenceWithoutContextError, /evidence.*context/i
+      end
+    end
+  end
+  describe '#vat' do
+  end
+
+  describe '#calculate_vat_for' do
+    let(:amount) { 20 }
+    let(:example_rate) { 0.2 }
+
+    context 'belonging to a Context' do
+      describe 'without receiving any specific rate' do
+        it 'returns the VAT for the amount parameter' do
+          expect(subject).to receive(:vat_for_current_context).and_return example_rate
+          expect(subject.calculate_vat_for amount).to be amount * example_rate
+        end
+      end
+
+      describe 'receiving a specific rate' do
+      end
+    end
+
+    context 'not belonging to any Context' do
+      it 'raises an error' do
+        expect { subject.calculate_vat_for amount }.to raise_error Eurocrats::EvidenceWithoutContextError, /evidence.*context/i
+      end
+    end
+  end
+  describe '#vat_for' do
   end
 
 end

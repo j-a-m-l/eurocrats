@@ -56,6 +56,7 @@ module Eurocrats
     end
 
     # ISO 3166-1 alpha-2, extracted from the source of the evidence
+    # TODO remove: use country.code
     attr_reader :country_code
 
     # Object that contains the information that supports the evidence
@@ -63,6 +64,9 @@ module Eurocrats
 
     # The exact moment in which the evidence was collected
     attr_reader :collected_at
+
+    # The current context in which this evidence is being used
+    attr_accessor :context
 
     def initialize country_code, source
       # TODO dup && freeze the source?
@@ -79,6 +83,30 @@ module Eurocrats
     def vat_rates
       country.vat_rates
     end
+
+    # Only if it belongs to a Context. It returns the VAT that should be charged
+    # when the country is the same that the one of this Evidence.
+    def vat_for_current_context rate=nil
+      if context_or_raise!.should_vat_be_charged? country
+        vat_rates[ (rate || context.default_rate) ]
+      else
+        0
+      end
+    end
+    alias vat vat_for_current_context
+
+    # Only if it belongs to a Context. It returns the VAT that should be charged
+    # for an amount, when the country is the same that the one of this Evidence.
+    def calculate_vat_for amount, rate=nil
+      amount * vat_for_current_context(rate)
+    end
+    alias vat_for calculate_vat_for
+
+    private
+
+      def context_or_raise!
+        @context or raise Eurocrats::EvidenceWithoutContextError.new 'Evidence needs a Context for performing the operation'
+      end
 
   end
 end
