@@ -161,7 +161,7 @@ describe Eurocrats::Evidence do
       end
     end
   end
-  describe '#vat' do
+  describe 'alias #vat' do
   end
 
   describe '#calculate_vat_for' do
@@ -186,7 +186,7 @@ describe Eurocrats::Evidence do
       end
     end
   end
-  describe '#vat_for' do
+  describe 'alias #vat_for' do
   end
 
 end

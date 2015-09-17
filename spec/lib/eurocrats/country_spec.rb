@@ -63,7 +63,7 @@ describe Eurocrats::Country do
       end
     end
   end
-  describe '.to_alpha2' do
+  describe 'alias .to_alpha2' do
   end
 
   describe '.vat_rates_in' do
@@ -120,12 +120,12 @@ describe Eurocrats::Country do
 
     # TODO more country codes
   end
-  describe '.in_eu?' do
+  describe 'alias .in_eu?' do
   end
 
-  describe '#code' do
+  describe 'alias #code' do
   end
-  describe '#alpha2_code' do
+  describe 'alias #alpha2_code' do
   end
 
 end
