@@ -2,7 +2,7 @@ class MyProductsController < ApplicationController
 
   def index
     @products = MyProduct.all
-    @vat_rate = Eurocrats.vat_rates_of(selected_country)['standard']
+    @vat_rate = Eurocrats::Country[selected_country]['standard']
 
   # Several things could raise an Eurocrats::Error while is determining the
   # evidenced country:

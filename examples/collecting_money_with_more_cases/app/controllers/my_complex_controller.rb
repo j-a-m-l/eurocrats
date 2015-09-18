@@ -13,7 +13,7 @@ class MyComplexController < ApplicationController
     else
 
       # Price + VAT for the country of the declared billing address
-      total_amount = eurocrats.with_vat_of 'billing_address', product.cost
+      total_amount = product.cost + eurocrats['billing_address'].calculate_vat_for product.cost
 
       @transaction = MyPayment.authorize_only! total_amount
       eurocrats['credit_card.country'] = @transaction.credit_card.country_code
@@ -26,7 +26,7 @@ class MyComplexController < ApplicationController
       elsif eurocrats.enough_evidences?
 
         # Ensure the price is the same that the one showed in the UI
-        if eurocrats.vat_of('billing_address') == eurocrats.vat_of('credit_card.country')
+        if eurocrats['billing_address'].vat == eurocrats['credit_card.country'].vat
           @transaction.collect_money!
         else
 

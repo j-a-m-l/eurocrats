@@ -3,23 +3,24 @@ class AlternativeComplexController < ApplicationController
   def create
 
     # Price + VAT for the country of the declared billing address
-    total_amount = eurocrats.with_vat_of 'billing_address', product.cost
+    billing_address_vat = eurocrats['billing_address'].vat_for product.cost
+    total_amount = product.cost + billing_address_vat
 
     @transaction = MyPayment.authorize_only! total_amount
 
-    # If the CreditCard object responds to `country_code` it is used automatically
+    # If the CreditCard object responds to `country_code` it is invoked automatically
     eurocrats['credit_card'] = @transaction.credit_card
 
-    # Supplier and Customer are European taxable persons; evidences are not required
+    # Supplier and Customer are European taxable persons; location evidences are irrelevant
     if eurocrats.taxables?
       @transaction.collect_money!
 
     # At least 2 of 3 possible evidences match
     elsif eurocrats.enough_evidences?
 
-      # Ensure the price is the same that the one showed in the UI
-      if eurocrats.vat_of('billing_address') == eurocrats.vat_of('credit_card') ||
-         eurocrats.vat_of('billing_address') == eurocrats.vat_of('ip_location')
+      # Ensure the price is the same that the one showed in the UI before collecting money
+      if billing_address_vat == eurocrats['credit_card'].vat_for(product.cost) ||
+         billing_address_vat == eurocrats['ip_location'].vat_for(product.cost)
 
         @transaction.collect_money!
       else
