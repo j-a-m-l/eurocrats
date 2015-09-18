@@ -15,9 +15,9 @@ module Eurocrats
       # Then, that location is added as an evidence ('ip_location') to the context.
       # In case the IP is a loopback address, it uses `Eurocrats.test_location`
       # instead, so it should usually be configured for testing or developing purposes.
-      def eurocrats supplier=nil, customer=nil
+      def eurocrats context_options={}
         @eurocrats ||= begin
-          context = Eurocrats::Context.new supplier, customer
+          context = Eurocrats::Context.new context_options
 
           context['ip_location'] = if Geocoder::IpAddress.new(ip).loopback?
             Eurocrats.test_location or raise Eurocrats::TestLocationError.new '`Eurocrats.test_location` is not set'

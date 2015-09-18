@@ -18,33 +18,41 @@ module Eurocrats
   # Other methods raise a `ConflictingEvidencesError` in that case because they
   # can't operate without knowing the country.
   #
+  # This class has a lot of aliases. Anyway, usually it is better to use one of  the
+  # longest forms, which are more explicit (and sometimes too verbose).
+  # TODO explain more about them
+  #
   class Context
     extend Forwardable
 
     # TODO configurable in Eurocrats
-    VIES_EVIDENCE_LABEL = 'eurocrats.vies.validation'
+    VIES_EVIDENCE_LABEL = 'vies_validation'
 
     attr_reader :supplier
     attr_reader :customer
+    attr_reader :default_rate
+    attr_reader :minimum_of_evidences
 
-    # TODO options...
-    def initialize supplier=nil, customer=nil
+    def initialize(supplier: nil, customer: nil, default_rate: 'standard', minimum_of_evidences: 2, evidences: {})
       @supplier ||= supplier ||= Eurocrats.default_supplier
 
-      raise ArgumentError.new 'A supplier is required' unless @supplier
+      raise ArgumentError.new 'Supplier is required' unless @supplier
 
       unless @supplier.is_a? Eurocrats::Taxable
         raise TypeError.new 'Supplier has to include Eurocrats::Taxable'
       end
 
       @customer ||= customer ||= Eurocrats::Customer.new
-      @evidences = {}
 
-      # TODO default rate
-      @rate = 'standard'
+      # TODO default currency
+      # TODO default currency from MoneyRails
 
-      # TODO
-      @minimum = 2
+      # TODO rename to default minimum?
+      @default_rate, @minimum, @evidences = default_rate, minimum_of_evidences, evidences
+    end
+
+    def open &block
+      instance_eval &block
     end
 
     # TODO evidences[]= like []=
@@ -76,11 +84,11 @@ module Eurocrats
     def non_conflicting_location_evidences
       return only_location_evidences if only_location_evidences.size == 1
 
-      # by_country: { country_code => [[evidence_label, evidence_object], ...] }
-      by_country = only_location_evidences.group_by {|l, e| e.country_code }
+      # Returns { country_code => [[evidence_label, evidence_object], ...] }
+      grouped_by_country = only_location_evidences.group_by {|l, e| e.country_code }
 
       # Gets the first country with at least 2 non conflicting evidences
-      non = by_country.find {|c, es_a| es_a.size >= @minimum }
+      non = grouped_by_country.find {|c, es_a| es_a.size >= @minimum }
 
       # Converts to Hash again: { evidence_label_1 => evidence_object_1, ... }
       (non && non[1] or {}).reduce({}) {|all, e_a| all.merge(e_a[0] => e_a[1]) }
@@ -94,17 +102,17 @@ module Eurocrats
     end
     alias conflicts conflicting_location_evidences
 
-    # TODO
-    def favorable_evidences? label_a, label_b
+    # TODO more than 2 evidences
+    def non_conflicting_location_evidences? label_a, label_b
       not conflicting_evidences?
     end
-    alias favorable? favorable_evidences?
+    alias favorable_evidences? non_conflicting_location_evidences?
 
     # TODO more than 2 evidences
-    def conflicting_evidences? label_a, label_b
+    def conflicting_location_evidences? label_a, label_b
       evidences[label_a].country_code != evidences[label_b].country_code
     end
-    alias conflicting? conflicting_evidences?
+    alias conflicting_evidences? conflicting_location_evidences?
 
     def enough_evidences?
       unless evidences.empty?
@@ -113,44 +121,25 @@ module Eurocrats
 
       false
     end
-    alias enough? enough_evidences?
 
-    # TODO remove, but add .code to Country
-    def evidenced_country_code
+    def evidenced_country
       unless non_conflicting_location_evidences.size >= @minimum
         raise ConflictingEvidencesError.new 'Operation requires enough non conflicting evidences'
       end
 
-      non_conflicting_location_evidences.values.first.country_code
-    end
-    alias country_code evidenced_country_code
-
-    def evidenced_country
-      Eurocrats.country evidenced_country_code
+      non_conflicting_location_evidences.values.first.country
     end
     alias country evidenced_country
 
-    # returns country code
-    # TODO remove
-    def country_code_of evidence_label
-      evidences[evidence_label].country_code
-    end
-
-    # returns Country object
-    # TODO remove
-    def country_of evidence_label
-      Eurocrats.country evidences[evidence_label].country_code
-    end
-
     # Are Supplier and Customer European taxable persons? (They have an European VAT number)
     def taxables?
-      @supplier.taxable? && @customer.taxable?
+      supplier.taxable? && customer.taxable?
     end
     alias b2b? taxables?
 
     # Stores automatically the VIES validation as an evidence
     def validate_on_vies!
-      @evidences[VIES_EVIDENCE_LABEL] = Vies::Validation.new(@supplier, @customer).request!
+      @evidences[VIES_EVIDENCE_LABEL] = Vies::Validation.new(supplier, customer).request!
     end
 
     def valid_vat_numbers?
@@ -167,10 +156,11 @@ module Eurocrats
     # => true
     # => false
     # => nil
-    def should_vat_be_charged?
-      if b2b? && valid_vat_numbers?
-         different_countries?
-      elsif Country.in_european_union? evidenced_country_code
+    # TODO test any country
+    def should_vat_be_charged? country=nil
+      if taxables? && valid_vat_numbers?
+        same_country?
+      elsif Country.in_eu?(country || evidenced_country)
         true
       else
         false
@@ -183,50 +173,33 @@ module Eurocrats
     end
     alias vat_rates evidenced_vat_rates
 
-    # TODO move to Country or remove
-    def vat_rates_in country_code
-      Eurocrats.country(country_code).vat_rates
-    end
-
-    # TODO vat_for in Evidence?
-    def vat_of evidence_label, amount, rate=nil
+    def evidenced_vat rate=nil
       if should_vat_be_charged?
+        evidenced_vat_rates[rate || default_rate]
       else
         0
       end
     end
+    alias vat evidenced_vat
 
     # TODO add the "as" method to Numeric objects
     # TODO admit Numeric as rate
-    def vat_for amount, rate=nil
-      if should_vat_be_charged?
-        rate ||= @rate
-        amount * vat_rates[rate] / 100
-      else
-        0
-      end
+    def calculate_vat_for amount, rate=nil
+      amount * evidenced_vat / 100
     end
-    alias vat vat_for
+    alias vat_for calculate_vat_for
 
     # Adds the VAT if necessary.
     # TODO add the "as" method to Numeric objects
-    def with_vat amount, rate=nil
+    def calculate_with_vat amount, rate=nil
       amount + amount * vat_for(amount, rate)
     end
-
-    # TODO default currency
-    # TODO default currency from MoneyRails
-    def exchange amount, from, to
-    end
-
-    def open &block
-      instance_eval &block
-    end
+    alias with_vat calculate_with_vat
 
     private
 
-      def different_countries?
-        @supplier.vat_number.country_code != @consumer.vat_number.country_code
+      def same_country?
+        supplier.vat_number.country_code == customer.vat_number.country_code
       end
 
   end

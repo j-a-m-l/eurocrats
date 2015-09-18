@@ -18,20 +18,19 @@ describe Eurocrats::Context do
     expect(subject).to receive(:evidences).and_return(evidences).at_least(:once)
   }
 
-  subject { described_class.new Eurocrats::Supplier.new }
+  let(:example_supplier) { Eurocrats::Supplier.new }
+
+  subject { described_class.new supplier: example_supplier }
 
   describe 'initialize' do
-
-    let(:example_supplier) { Eurocrats::Supplier.new }
-
     context 'receiving and explicit supplier' do
       it 'uses it' do
-        expect(described_class.new(example_supplier).supplier).to be example_supplier
+        expect(described_class.new(supplier: example_supplier).supplier).to be example_supplier
       end
 
       context 'that is not a Taxable instance' do
         it 'raises an error' do
-          expect { described_class.new 'NotTaxable' }.to raise_error TypeError, /taxable/i
+          expect { described_class.new supplier: 'NotTaxable' }.to raise_error TypeError, /taxable/i
         end
       end
     end
@@ -53,13 +52,15 @@ describe Eurocrats::Context do
         end
       end
     end
+
+    # TODO other arguments
   end
 
+  # TODO
   describe '#evidences' do
     it 'collects the customer evidences'
   end
-
-  describe '#evidence' do
+  describe 'alias #evidence' do
   end
 
   describe '#[]' do
@@ -102,8 +103,7 @@ describe Eurocrats::Context do
     end
   end
 
-  # TODO alias
-  describe '#favorable_evidences' do
+  describe '#non_conflicting_location_evidences' do
     context 'having no evidence' do
       let(:evidences) { {} }
 
@@ -149,15 +149,36 @@ describe Eurocrats::Context do
       end
     end
 
-    # TODO more than 2
-    # TODO 2 + 2 different non_conflicting
+    context 'having 2 pairs of non conflicting evidences' do
+      it '' do
+        pending
+      end
+    end
+
+    # TODO more than 2 non conflicting
+
+    # TODO minimum is more than 2
+  end
+  describe 'alias #favorable_evidences' do
   end
 
-  # TODO alias
-  describe '#conflicting_evidences' do
+  describe '#conflicting_location_evidences' do
+  end
+  describe 'alias #conflicts' do
   end
 
-  # TODO alias
+  describe '#non_conflicting_location_evidences?' do
+  end
+  describe 'alias #non_conflicting_evidences?' do
+  end
+  describe 'alias #favorable_evidences?' do
+  end
+
+  describe '#conflicting_location_evidences?' do
+  end
+  describe 'alias #conflicting_evidences?' do
+  end
+
   describe '#enough_evidences?' do
     context 'b2b' do
       let(:mock_b2b!) {
@@ -191,17 +212,14 @@ describe Eurocrats::Context do
     end
   end
 
-  # TODO alias
-  describe '#evidenced_country_code' do
+  describe '#evidenced_country' do
+  end
+  describe 'alias #country' do
   end
 
-  describe '#country_code_of' do
-  end
-
-  # TODO alias
   describe '#taxables?' do
   end
-  describe '#b2b?' do
+  describe 'alias #b2b?' do
   end
 
   describe '#validate_on_vies!' do
@@ -214,25 +232,165 @@ describe Eurocrats::Context do
   end
 
   describe '#should_vat_be_charged?' do
+
+    shared_examples :should_be_charged do
+      it 'then VAT should be charged' do
+        expect(subject.should_vat_be_charged?).to be true
+      end
+    end
+
+    shared_examples :should_not_be_charged do
+      it 'then VAT should not be charged' do
+        expect(subject.should_vat_be_charged?).to be false
+      end
+    end
+
+    context 'without enough evidences' do
+      it 'raises an error' do
+        expect { subject.should_vat_be_charged? }.to raise_error Eurocrats::ConflictingEvidencesError, /conflict.*evidence/i
+      end
+    end
+
+    context 'with enough evidences' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+
+      context 'evidenced country is in the European Union' do
+        before(:each) { allow(subject).to receive(:evidenced_country).and_return Eurocrats::Country['FR'] }
+
+        context 'Supplier and Customer have both VAT numbers' do
+          before(:each) { is_expected.to receive(:taxables?).and_return true }
+
+          context 'that are invalid' do
+            before(:each) { is_expected.to receive(:valid_vat_numbers?).and_return false }
+
+            include_examples :should_be_charged
+          end
+
+          context 'that are valid' do
+            before(:each) { is_expected.to receive(:valid_vat_numbers?).and_return true }
+
+            let(:pt_vat_number) { 'PT123456789' }
+            let(:pt_vat_number2) { 'PT098765432' }
+            let(:es_vat_number) { 'ES77777777Z' }
+
+            before(:each) { subject.supplier.vat_number = pt_vat_number }
+
+            context 'and belong to the same country' do
+              before(:each) { subject.customer.vat_number = pt_vat_number2 }
+
+              include_examples :should_be_charged
+            end
+
+            context 'and belong to different countries' do
+              before(:each) { subject.customer.vat_number = es_vat_number }
+
+              include_examples :should_not_be_charged
+            end
+          end
+        end
+
+        context 'Supplier and Customer do not have both VAT numbers' do
+          include_examples :should_be_charged
+        end
+      end
+
+      context 'evidenced country is not in the European Union' do
+        before(:each) { is_expected.to receive(:evidenced_country).and_return Eurocrats::Country['AR'] }
+
+        include_examples :should_not_be_charged
+      end
+    end
+
+    # TODO country parameter
   end
-  describe '#charge_vat?' do
+  describe 'alias #charge_vat?' do
   end
 
   describe '#evidenced_vat_rates' do
+    context 'without enough evidences' do
+      it 'raises an error' do
+        expect { subject.evidenced_vat_rates }.to raise_error Eurocrats::ConflictingEvidencesError, /conflict.*evidence/i
+      end
+    end
+
+    context 'with enough evidences' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+
+      it 'returns the VAT rate of the evidenced country' do
+        expect(subject.evidenced_vat_rates).to eq subject.evidenced_country.vat_rates
+      end
+    end
   end
-  describe '#vat_rates' do
+  describe 'alias #vat_rates' do
   end
 
-  describe '#vat_rates_in' do
+  describe '#evidenced_vat' do
+    context 'without enough evidences' do
+      it 'raises an error' do
+        expect { subject.evidenced_vat }.to raise_error Eurocrats::ConflictingEvidencesError, /conflict.*evidence/i
+      end
+    end
+
+    context 'with enough evidences' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+
+      context 'without receiving any VAT rate' do
+        context 'VAT should be charged' do
+          it 'returns the value of the evidenced default VAT rate of the context' do
+            expect(subject).to receive(:should_vat_be_charged?).and_return(true)
+            expect(subject).to receive(:evidenced_vat_rates).and_return({'yeah' => 20})
+            expect(subject).to receive(:default_rate).and_return 'yeah'
+            expect(subject.evidenced_vat).to eq 20
+          end
+        end
+
+        context 'VAT should not be charged' do
+          it 'returns zero' do
+            expect(subject).to receive(:should_vat_be_charged?).and_return false
+            expect(subject.evidenced_vat).to eq 0
+          end
+        end
+      end
+
+      context 'receiving a specific VAT rate' do
+      end
+    end
+  end
+  describe 'alias #vat' do
   end
 
-  describe '#vat_rates_of' do
+  describe '#calculate_vat_for' do
+    let(:amount) { 30 }
+
+    context 'without enough evidences' do
+      it 'raises an error' do
+        expect { subject.calculate_vat_for amount }.to raise_error Eurocrats::ConflictingEvidencesError, /conflict.*evidence/i
+      end
+    end
+
+    context 'with enough evidences' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+
+      context 'without receiving any VAT rate' do
+        it 'uses the default VAT rate of the context'
+
+        it 'returns the amount using evidenced VAT' do
+          evidenced_vat = 20
+          expect(subject).to receive(:evidenced_vat).and_return evidenced_vat
+          expect(subject.calculate_vat_for amount).to eq(amount * evidenced_vat / 100)
+        end
+      end
+
+      context 'receiving a specific VAT rate' do
+      end
+    end
+  end
+  describe 'alias #vat_for' do
   end
 
-  describe '#vat_for' do
+  describe '#calculate_with_vat' do
   end
-
-  describe '#with_vat' do
+  describe 'alias #with_vat' do
   end
 
   describe '#open' do
@@ -240,6 +398,7 @@ describe Eurocrats::Context do
 
   describe '#consumer' do
   end
+
   describe '#supplier' do
   end
   

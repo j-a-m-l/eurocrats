@@ -23,6 +23,8 @@ module Eurocrats
     # For collecting the evidences
     include Evidentiable
 
+    # TODO The default currency for this customer
+
     def initialize data={}
       self.vat_number = data[:vat_number] if data.has_key? :vat_number
     end

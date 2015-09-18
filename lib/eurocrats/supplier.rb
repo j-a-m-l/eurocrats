@@ -14,8 +14,10 @@ module Eurocrats
   #
   class Supplier
 
-    # Supplier should be taxable persons
+    # Supplier should be a taxable person
     include Taxable
+
+    # TODO The default currency for this supplier
 
   end
 end
