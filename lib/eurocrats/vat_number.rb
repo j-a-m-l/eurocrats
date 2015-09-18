@@ -17,8 +17,7 @@ module Eurocrats
       Valvat::Syntax.validate vat_number
     end
 
-    # attr_reader :vat_number
-    attr_reader :number
+    attr_reader :id
     attr_reader :country_code
 
     # This method has been overridden to treat 2 different instances, but with
@@ -29,11 +28,9 @@ module Eurocrats
 
     # TODO raise if doesn't exist?
     def initialize vat_number
-      @vat_number = vat_number
+      @id, @country_code = vat_number, vat_number[0...2]
 
-      unless seems_valid?
-        raise ::Eurocrats::InvalidVatNumberError.new "\"#@vat_number\" is not a valid VAT number"
-      end
+      raise Eurocrats::InvalidVatNumberError.new "\"#@id\" is not a valid VAT number" unless seems_valid?
     end
 
     # Grece VAT country code is "EL", but their ISO 3166-1 alpha-2 country code is "GR"
@@ -42,11 +39,11 @@ module Eurocrats
     end
 
     def seems_valid?
-      self.class.seems_valid? @vat_number
+      self.class.seems_valid? @id
     end
 
     def to_s
-      @vat_number
+      @id
     end
 
   end

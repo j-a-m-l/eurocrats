@@ -80,6 +80,11 @@ describe Eurocrats::VatNumber do
   end
 
   describe '#initialize' do
+    let(:ie_vat_number) { 'IE6388047V' }
+
+    it 'establish the country code' do
+      expect(described_class.new(ie_vat_number).country_code).to eq 'IE'
+    end
   end
 
   # TODO attr_readers
