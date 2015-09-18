@@ -15,7 +15,7 @@ This version should add some tools for invoicing, like:
 
 This version should deal with all the VAT corner cases, like:
 
- * VAT thresholds by country.
+ * VAT thresholds by country?
  * VAT for autonomous regions.
  * Special VAT rates.
  * Custom VAT exemptions.
@@ -28,27 +28,30 @@ Other possible improvements:
 
 This version should include a full API review and small improvements like:
 
- * Configurable number of minimum evidences in `Context` instances.
  * Allow returning additional data, like address or company type, in `VATNumberValidationsController#show`.
  * Improve controller security limiting petitions, adding delays or things like that?
  * Return error code and messages, and optionally log them, on VIES validations.
  * `eurocrats` method for Rails controllers.
  * `Strategy` class that encapsulates payment algorithms?
 
+Other ideas:
+ * Add "method access" (`evidences.lol_address`) along hash syntax (`evidences["lol_address"]`) to evidences.
+
 ## 0.9.0
 
  * Handle future VAT rates changes automatically.
  * VAT rates for previous dates.
- * Configurable default rate in `Eurocrats` or in `Context` instances.
  * Document and improve the Rake tasks that generates data.
+ * Special (possibly non computable) evidences (without country code) like "Not in US".
 
 ## 0.8.0
 
- * Special (possibly non computable) evidences (without country code) like "Not in US".
  * Basic cache.
  * Configurable cache.
  * Cache geo-locations.
  * Cache VIES requests.
+ * Save automatically updated VAT rates to a file.
+ * Load automatically updated VAT rates from a file into cache.
 
 ## 0.7.0
 
@@ -69,19 +72,12 @@ This version should include a full API review and small improvements like:
 
 ## 0.5.0
 
- * Integrate the exchange features into `Context`.
+ * Integrate the exchanging features into `Context`.
  * Money and Numeric objects exchange from one currency to others.
  * Method for getting all the exchange rates from one currency to others.
- * Save updates rates to a file.
- * Load updates rates from a file.
  * Exchange examples.
  * Use `BigDecimal` for calculations.
-
-## 0.4.0
-
- * Fix some Eurocrats methods.
- * Remove several `Context` methods that provide functionality that could be used through the `evidence` method.
- * Add a new `evidence` method to `Context`.
- * Update the examples to use the `Context#evidence` interface instead of the previous methods.
  * `Context#evidences[...] = ...` should behave like `Context#[...] = ...`.
- * Add "method access" (`evidences.lol_address`) along hash syntax (`evidences["lol_address"]`) to evidences.
+ * Create a `VatRate` object?
+ * Configurable global default VAT rate in `Eurocrats`
+ * Configurable global default number of minimum evidences in `Eurocrats`.

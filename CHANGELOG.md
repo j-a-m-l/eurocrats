@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.4.0 (2015-09-17) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Update the examples.
+ * Remove several `Context` methods that provide functionality that could be used through other methods, like `evidence` or `evidenced_country`.
+ * Add some pending tests to `Context`.
+ * Fix `VatNumber#country_code` reader.
+ * Configurable default rate in `Eurocrats` or in `Context` instances.
+ * Configurable number of minimum evidences in `Context` instances.
+ * Change the initialization of `Context` for admitting options,
+ * Add `vat_rates_in` and `in_european_union?` class methods to `Country`, and some aliases, and use `ISO3166::Country` as its parent class, so now has much more functionality.
+ * Add `vat_for_current_context` and `calculate_vat_for` methods to `Evidence` for evaluating the corresponding VAT inside a `Context`.
+ * Add a new `evidence` method to `Context`.
+
 ## 0.3.6 (2015-09-16) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Add functionality to the `Evidence` class (`country` and `vat_rates` methods).
