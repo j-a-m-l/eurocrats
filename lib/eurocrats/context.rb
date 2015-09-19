@@ -97,8 +97,8 @@ module Eurocrats
 
     # This method depends on the result of `non_conflicting_location_evidences`, so it should
     # not be necessary to override it
-    # TODO
     def conflicting_location_evidences
+      only_location_evidences.reject {|l, _| non_conflicting_location_evidences.has_key? l }
     end
     alias conflicts conflicting_location_evidences
 

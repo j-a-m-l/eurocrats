@@ -103,7 +103,7 @@ describe Eurocrats::Context do
     end
   end
 
-  describe '#non_conflicting_location_evidences' do
+  describe 'alias #favorable_evidences' do
     context 'having no evidence' do
       let(:evidences) { {} }
 
@@ -159,12 +159,66 @@ describe Eurocrats::Context do
 
     # TODO minimum is more than 2
   end
-  describe 'alias #favorable_evidences' do
+  describe '#non_conflicting_location_evidences' do
   end
 
-  describe '#conflicting_location_evidences' do
-  end
   describe 'alias #conflicts' do
+    context 'having no evidence' do
+      let(:evidences) { {} }
+
+      it 'returns an empty Hash' do
+        stub_evidences!
+        expect(subject.conflicts).to eq({})
+      end
+    end
+
+    context 'having only 1 evidence' do
+      let(:evidences) { { 'one' => Eurocrats::Evidence.from('FR') } }
+
+      it 'returns an empty Hash' do
+        stub_evidences!
+        expect(subject.conflicts).to eq({})
+      end
+    end
+
+    context 'having 2 non conflicting evidences' do
+      let(:evidences) { non_conflicting }
+
+      it 'returns its Hash' do
+        stub_evidences!
+        expect(subject.conflicts).to eq({})
+      end
+    end
+
+    context 'having 2 conflicting evidences' do
+      let(:evidences) { conflicting }
+
+      it 'returns an empty Hash' do
+        stub_evidences!
+        expect(subject.conflicts).to eq conflicting
+      end
+    end
+
+    context 'having 2 non conflicting and 2 conflicting evidences' do
+      let(:evidences) { non_conflicting.merge conflicting }
+
+      it 'returns its Hash' do
+        stub_evidences!
+        expect(subject.conflicts).to eq conflicting
+      end
+    end
+
+    context 'having 2 pairs of non conflicting evidences' do
+      it '' do
+        pending
+      end
+    end
+
+    # TODO more than 2 non conflicting
+
+    # TODO minimum is more than 2
+  end
+  describe '#conflicting_location_evidences' do
   end
 
   describe '#non_conflicting_location_evidences?' do
