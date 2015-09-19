@@ -104,7 +104,7 @@ module Eurocrats
 
     # TODO more than 2 evidences
     def non_conflicting_location_evidences? label_a, label_b
-      not conflicting_evidences?
+      not conflicting_location_evidences? label_a, label_b
     end
     alias favorable_evidences? non_conflicting_location_evidences?
 
