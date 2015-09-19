@@ -36,6 +36,7 @@ This version should include a full API review and small improvements like:
 
 Other ideas:
  * Add "method access" (`evidences.lol_address`) along hash syntax (`evidences["lol_address"]`) to evidences.
+ * `Context#evidence[...] = ...` should behave like `Context#[...] = ...`.
 
 ## 0.9.0
 
@@ -66,18 +67,22 @@ Other ideas:
 ## 0.6.0
 
  * Persist contexts, evidences and VIES validations?
- * Example with ad hoc Supplier and Customer classes.
+ * Example with ad hoc supplier and customer classes.
  * Integrate the `valvat` VAT number validator.
  * Capture evidences from a class that includes `Evidentiable`
+ * Add some tests to `Context#taxables?` method.
+ * Add some tests to `Context#calculate_with_vat` method.
+ * Add some tests to `Context#validate_on_vies!` method.
 
 ## 0.5.0
 
  * Integrate the exchanging features into `Context`.
- * Money and Numeric objects exchange from one currency to others.
+ * `Money` and `Numeric` objects exchange from one currency to others.
  * Method for getting all the exchange rates from one currency to others.
  * Exchange examples.
- * Use `BigDecimal` for calculations.
- * `Context#evidences[...] = ...` should behave like `Context#[...] = ...`.
+ * Use `BigDecimal` or `Money` for calculations?
  * Create a `VatRate` object?
  * Configurable global default VAT rate in `Eurocrats`
  * Configurable global default number of minimum evidences in `Eurocrats`.
+ * Implement `Context#non_conflicting_location_evidences?` method.
+ * Implement `Context#conflicting_location_evidences?` method.

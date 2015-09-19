@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.1 (2015-09-19) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Implement `Context#conflicting_location_evidences` method.
+ * Add some tests to `Context#evidenced_country` method.
+
 ## 0.4.0 (2015-09-17) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Update the examples.
