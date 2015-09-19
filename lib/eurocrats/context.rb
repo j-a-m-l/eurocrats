@@ -55,7 +55,7 @@ module Eurocrats
       instance_eval &block
     end
 
-    # TODO evidences[]= like []=
+    # TODO evidences[]= or evidence[]= like []=
     def evidences
       @evidences.merge(customer.collect_eurocrats_evidences)
     end

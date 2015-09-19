@@ -1,5 +1,6 @@
 # How to make an invoice:
 # http://ec.europa.eu/taxation_customs/taxation/vat/topics/invoicing_en.htm
+# http://ec.europa.eu/taxation_customs/tic/public/invRules/invRulesPublicationPage.html
 
 # Which countries and cases require a billing address?
 

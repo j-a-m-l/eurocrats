@@ -213,6 +213,21 @@ describe Eurocrats::Context do
   end
 
   describe '#evidenced_country' do
+    context 'without enough evidences' do
+      it 'raises an error' do
+        expect { subject.evidenced_country }.to raise_error Eurocrats::ConflictingEvidencesError, /conflict.*evidence/i
+      end
+    end
+
+    # TODO minimum
+    context 'with enough evidences' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+
+      # TODO more cases, like 2 + 2
+      it 'returns the country of the non conflicting evidences' do
+        expect(subject.evidenced_country).to eq non_conflicting.values.first.country
+      end
+    end
   end
   describe 'alias #country' do
   end

@@ -27,7 +27,8 @@ module Eurocrats
     end
 
     # TODO return a Validation
-    # def validate requester, number
+    # def validation requester, number
+    #   Vies::Validation.new(supplier, customer).request!
     # end
 
   end
