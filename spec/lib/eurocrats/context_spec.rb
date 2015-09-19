@@ -221,9 +221,26 @@ describe Eurocrats::Context do
   describe '#conflicting_location_evidences' do
   end
 
-  describe 'alias #favorable_evidences?' do
-  end
   describe '#non_conflicting_location_evidences?' do
+    describe 'receiving 2 existent evidence labels that refer to different countries' do
+      subject { described_class.new supplier: example_supplier, evidences: conflicting }
+      let(:labels) { conflicting.keys }
+
+      it 'returns true' do
+        expect(subject.non_conflicting_location_evidences? labels[0], labels[1]).to be false
+      end
+    end
+
+    describe 'receiving 2 existent evidence labels that refer to the same countries' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+      let(:labels) { non_conflicting.keys }
+
+      it 'returns false' do
+        expect(subject.non_conflicting_location_evidences? labels[0], labels[1]).to be true
+      end
+    end
+  end
+  describe 'alias #favorable_evidences?' do
   end
   describe 'alias #non_conflicting_evidences?' do
   end
