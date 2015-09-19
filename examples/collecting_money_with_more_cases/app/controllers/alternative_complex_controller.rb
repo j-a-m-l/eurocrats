@@ -12,7 +12,7 @@ class AlternativeComplexController < ApplicationController
     eurocrats['credit_card'] = @transaction.credit_card
 
     # Supplier and Customer are European taxable persons; location evidences are irrelevant
-    if eurocrats.taxables?
+    if eurocrats.taxable_persons?
       @transaction.collect_money!
 
     # At least 2 of 3 possible evidences match

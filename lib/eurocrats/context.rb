@@ -132,10 +132,10 @@ module Eurocrats
     alias country evidenced_country
 
     # Are Supplier and Customer European taxable persons? (They have an European VAT number)
-    def taxables?
+    def taxable_persons?
       supplier.taxable? && customer.taxable?
     end
-    alias b2b? taxables?
+    alias b2b? taxable_persons?
 
     # Stores automatically the VIES validation as an evidence
     def validate_on_vies!
@@ -158,7 +158,7 @@ module Eurocrats
     # => nil
     # TODO test any country
     def should_vat_be_charged? country=nil
-      if taxables? && valid_vat_numbers?
+      if taxable_persons? && valid_vat_numbers?
         same_country?
       elsif Country.in_eu?(country || evidenced_country)
         true

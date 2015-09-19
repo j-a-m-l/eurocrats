@@ -3,7 +3,7 @@ class MyComplexController < ApplicationController
   def create
 
     # Supplier and Customer are European taxable persons or IP and billing addresses match
-    if eurocrats.taxables? || eurocrats.enough_evidences?
+    if eurocrats.b2b? || eurocrats.enough_evidences?
 
       # Adds the VAT using the evidenced country, only if is necessary
       total_amount = eurocrats.with_vat product.cost

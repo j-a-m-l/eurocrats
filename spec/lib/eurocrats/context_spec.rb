@@ -320,7 +320,41 @@ describe Eurocrats::Context do
   describe 'alias #country' do
   end
 
-  describe '#taxables?' do
+  describe '#taxable_persons?' do
+    let(:taxable) { Eurocrats::Customer.new vat_number: 'ES77777777Z' }
+    let(:non_taxable) { Eurocrats::Customer.new }
+
+    shared_examples :are_not_taxable do
+      it 'returns true' do
+        expect(subject.taxable_persons?).to be false
+      end
+    end
+
+    context 'both supplier and customer are taxable' do
+      subject { described_class.new supplier: taxable, customer: taxable }
+
+      it 'returns true' do
+        expect(subject.taxable_persons?).to be true
+      end
+    end
+
+    context 'both supplier and customer are not taxable' do
+      subject { described_class.new supplier: non_taxable, customer: non_taxable }
+
+      include_examples :are_not_taxable
+    end
+
+    context 'supplier is taxable and customer is not' do
+      subject { described_class.new supplier: taxable, customer: non_taxable }
+
+      include_examples :are_not_taxable
+    end
+
+    context 'supplier is not taxable and customer is' do
+      subject { described_class.new supplier: non_taxable, customer: taxable }
+
+      include_examples :are_not_taxable
+    end
   end
   describe 'alias #b2b?' do
   end
@@ -361,7 +395,7 @@ describe Eurocrats::Context do
         before(:each) { allow(subject).to receive(:evidenced_country).and_return Eurocrats::Country['FR'] }
 
         context 'Supplier and Customer have both VAT numbers' do
-          before(:each) { is_expected.to receive(:taxables?).and_return true }
+          before(:each) { is_expected.to receive(:taxable_persons?).and_return true }
 
           context 'that are invalid' do
             before(:each) { is_expected.to receive(:valid_vat_numbers?).and_return false }
