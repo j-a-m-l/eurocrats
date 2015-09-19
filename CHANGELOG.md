@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.2 (2015-09-19) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Rename `Context#taxables?` to `Context#taxable_persons?` and add it some tests.
+ * Add some tests to `Context#non_conflicting_location_evidences?` method.
+ * Add some tests to `Context#conflicting_location_evidences?` method.
+
 ## 0.4.1 (2015-09-19) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Implement `Context#conflicting_location_evidences` method.

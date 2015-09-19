@@ -70,7 +70,6 @@ Other ideas:
  * Example with ad hoc supplier and customer classes.
  * Integrate the `valvat` VAT number validator.
  * Capture evidences from a class that includes `Evidentiable`
- * Add some tests to `Context#taxables?` method.
  * Add some tests to `Context#calculate_with_vat` method.
  * Add some tests to `Context#validate_on_vies!` method.
 
@@ -84,5 +83,3 @@ Other ideas:
  * Create a `VatRate` object?
  * Configurable global default VAT rate in `Eurocrats`
  * Configurable global default number of minimum evidences in `Eurocrats`.
- * Implement `Context#non_conflicting_location_evidences?` method.
- * Implement `Context#conflicting_location_evidences?` method.
