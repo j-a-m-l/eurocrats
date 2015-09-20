@@ -526,6 +526,30 @@ describe Eurocrats::Context do
   end
 
   describe '#calculate_with_vat' do
+    let(:amount) { 102 }
+
+    context 'without enough evidences' do
+      it 'raises an error' do
+        expect { subject.calculate_with_vat amount }.to raise_error Eurocrats::ConflictingEvidencesError, /conflict.*evidence/i
+      end
+    end
+
+    context 'with enough evidences' do
+      subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
+
+      context 'without receiving any VAT rate' do
+        it 'uses the default VAT rate of the context'
+
+        it 'returns the amount using evidenced VAT' do
+          evidenced_vat = 20
+          expect(subject).to receive(:evidenced_vat).and_return evidenced_vat
+          expect(subject.calculate_with_vat amount).to eq(amount * evidenced_vat / 100 + amount)
+        end
+      end
+
+      context 'receiving a specific VAT rate' do
+      end
+    end
   end
   describe 'alias #with_vat' do
   end
