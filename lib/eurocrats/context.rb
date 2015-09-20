@@ -183,17 +183,15 @@ module Eurocrats
     alias vat evidenced_vat
 
     # TODO add the "as" method to Numeric objects
-    # TODO admit also Numeric as rate
-    def calculate_vat_for amount, rate=nil
-      amount * evidenced_vat / 100
+    def calculate_vat_for amount, options={}
+      amount * evidenced_vat(options[:vat_rate]) / 100
     end
     alias vat_for calculate_vat_for
 
     # Adds the VAT if necessary.
     # TODO add the "as" method to Numeric objects
-    # TODO admit also Numeric as rate
-    def calculate_with_vat amount, rate=nil
-      amount + calculate_vat_for(amount, rate)
+    def calculate_with_vat amount, options={}
+      amount + calculate_vat_for(amount, options)
     end
     alias with_vat calculate_with_vat
 

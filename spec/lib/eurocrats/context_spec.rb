@@ -471,25 +471,34 @@ describe Eurocrats::Context do
     context 'with enough evidences' do
       subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
 
-      context 'without receiving any VAT rate' do
-        context 'VAT should be charged' do
+      let(:example_rates) { {'yeah' => 20, 'other' => 40} }
+
+      context 'VAT should be charged' do
+        before(:each) { expect(subject).to receive(:should_vat_be_charged?).and_return true }
+
+        context 'without receiving any VAT rate' do
           it 'returns the value of the evidenced default VAT rate of the context' do
-            expect(subject).to receive(:should_vat_be_charged?).and_return(true)
-            expect(subject).to receive(:evidenced_vat_rates).and_return({'yeah' => 20})
             expect(subject).to receive(:default_rate).and_return 'yeah'
-            expect(subject.evidenced_vat).to eq 20
+            expect(subject).to receive(:evidenced_vat_rates).and_return example_rates
+            expect(subject.evidenced_vat).to eq example_rates['yeah']
           end
         end
 
-        context 'VAT should not be charged' do
-          it 'returns zero' do
-            expect(subject).to receive(:should_vat_be_charged?).and_return false
-            expect(subject.evidenced_vat).to eq 0
+        context 'receiving a specific VAT rate' do
+          it 'returns the value of the evidenced received VAT rate' do
+            allow(subject).to receive(:default_rate).and_return 'other'
+            expect(subject).to receive(:evidenced_vat_rates).and_return example_rates
+            expect(subject.evidenced_vat 'yeah').to eq example_rates['yeah']
           end
         end
       end
 
-      context 'receiving a specific VAT rate' do
+      context 'VAT should not be charged' do
+        before(:each) { expect(subject).to receive(:should_vat_be_charged?).and_return false }
+
+        it 'returns zero' do
+          expect(subject.evidenced_vat).to eq 0
+        end
       end
     end
   end
@@ -509,16 +518,19 @@ describe Eurocrats::Context do
       subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
 
       context 'without receiving any VAT rate' do
-        it 'uses the default VAT rate of the context'
-
-        it 'returns the amount using evidenced VAT' do
+        it 'returns the VAT amount using the evidenced VAT of the default rate' do
           evidenced_vat = 20
-          expect(subject).to receive(:evidenced_vat).and_return evidenced_vat
+          expect(subject).to receive(:evidenced_vat).with(nil).and_return evidenced_vat
           expect(subject.calculate_vat_for amount).to eq(amount * evidenced_vat / 100)
         end
       end
 
       context 'receiving a specific VAT rate' do
+        it 'returns the VAT amount using the evidenced VAT of the received rate' do
+          evidenced_vat = 20
+          expect(subject).to receive(:evidenced_vat).with('lol').and_return evidenced_vat
+          expect(subject.calculate_vat_for amount, vat_rate: 'lol').to eq(amount * evidenced_vat / 100)
+        end
       end
     end
   end
@@ -538,16 +550,19 @@ describe Eurocrats::Context do
       subject { described_class.new supplier: example_supplier, evidences: non_conflicting }
 
       context 'without receiving any VAT rate' do
-        it 'uses the default VAT rate of the context'
-
-        it 'returns the amount using evidenced VAT' do
+        it 'returns the total amount using the evidenced VAT of the default rate' do
           evidenced_vat = 20
-          expect(subject).to receive(:evidenced_vat).and_return evidenced_vat
+          expect(subject).to receive(:evidenced_vat).with(nil).and_return evidenced_vat
           expect(subject.calculate_with_vat amount).to eq(amount * evidenced_vat / 100 + amount)
         end
       end
 
       context 'receiving a specific VAT rate' do
+        it 'returns the total amount using the evidenced VAT of the received rate' do
+          evidenced_vat = 20
+          expect(subject).to receive(:evidenced_vat).with('lol').and_return evidenced_vat
+          expect(subject.calculate_with_vat amount, vat_rate: 'lol').to eq(amount * evidenced_vat / 100 + amount)
+        end
       end
     end
   end
