@@ -30,10 +30,11 @@ module Eurocrats
 
     attr_reader :supplier
     attr_reader :customer
-    attr_reader :default_rate
+    attr_reader :vat_rate
+    # TODO rename to :default minimum, :min_evidences?
     attr_reader :minimum_of_evidences
 
-    def initialize(supplier: nil, customer: nil, default_rate: 'standard', minimum_of_evidences: 2, evidences: {})
+    def initialize(supplier: nil, customer: nil, vat_rate: 'standard', minimum_of_evidences: 2, evidences: {})
       @supplier ||= supplier ||= Eurocrats.default_supplier
 
       raise ArgumentError.new 'Supplier is required' unless @supplier
@@ -47,8 +48,7 @@ module Eurocrats
       # TODO default currency
       # TODO default currency from MoneyRails
 
-      # TODO rename to default minimum?
-      @default_rate, @minimum, @evidences = default_rate, minimum_of_evidences, evidences
+      @vat_rate, @minimum, @evidences = vat_rate, minimum_of_evidences, evidences
     end
 
     def open &block
@@ -156,7 +156,6 @@ module Eurocrats
     # => true
     # => false
     # => nil
-    # TODO test any country
     def should_vat_be_charged? country=nil
       if taxable_persons? && valid_vat_numbers?
         same_country?
@@ -175,7 +174,7 @@ module Eurocrats
 
     def evidenced_vat rate=nil
       if should_vat_be_charged?
-        evidenced_vat_rates[rate || default_rate]
+        evidenced_vat_rates[rate || vat_rate]
       else
         0
       end

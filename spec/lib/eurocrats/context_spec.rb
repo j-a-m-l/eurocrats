@@ -478,7 +478,7 @@ describe Eurocrats::Context do
 
         context 'without receiving any VAT rate' do
           it 'returns the value of the evidenced default VAT rate of the context' do
-            expect(subject).to receive(:default_rate).and_return 'yeah'
+            expect(subject).to receive(:vat_rate).and_return 'yeah'
             expect(subject).to receive(:evidenced_vat_rates).and_return example_rates
             expect(subject.evidenced_vat).to eq example_rates['yeah']
           end
@@ -486,7 +486,7 @@ describe Eurocrats::Context do
 
         context 'receiving a specific VAT rate' do
           it 'returns the value of the evidenced received VAT rate' do
-            allow(subject).to receive(:default_rate).and_return 'other'
+            allow(subject).to receive(:vat_rate).and_return 'other'
             expect(subject).to receive(:evidenced_vat_rates).and_return example_rates
             expect(subject.evidenced_vat 'yeah').to eq example_rates['yeah']
           end
