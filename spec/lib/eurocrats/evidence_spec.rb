@@ -70,6 +70,7 @@ describe Eurocrats::Evidence do
 
   describe '#initialize' do
     let(:source) { 'example source' }
+    let(:context) { 'example context' }
 
     it 'establish the country code' do
       expect(described_class.new(country_code, source).country_code).to eq country_code
@@ -77,6 +78,10 @@ describe Eurocrats::Evidence do
 
     it 'establish the source' do
       expect(described_class.new(country_code, source).source).to be source
+    end
+
+    it 'establish the context' do
+      expect(described_class.new(country_code, source, context).context).to be context
     end
 
     it 'tries to convert the country_code parameter to ISO 3166-1 alpha-2' do

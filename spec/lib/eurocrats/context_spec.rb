@@ -54,6 +54,17 @@ describe Eurocrats::Context do
     end
 
     # TODO other arguments
+    context 'receiving evidences' do
+      context 'that are not valid' do
+        it 'raises'
+      end
+
+      context 'that are valid' do
+        it 'clones them'
+
+        it 'establish their context'
+      end
+    end
   end
 
   # TODO
@@ -83,6 +94,13 @@ describe Eurocrats::Context do
   describe '#[]=' do
     let(:label) { 'declared.country_code' }
 
+    shared_examples :establish_context do
+      it 'establish the context of the evidence' do
+        subject[label] = source
+        expect(subject.evidences[label].context).to eq subject
+      end
+    end
+
     context 'receiving an Evidence' do
       let(:source) { Eurocrats::Evidence.from 'IT' }
 
@@ -90,6 +108,8 @@ describe Eurocrats::Context do
         subject[label] = source
         expect(subject.evidences[label]).to be source
       end
+
+      include_examples :establish_context
     end
 
     context 'receiving other Object' do
@@ -100,6 +120,8 @@ describe Eurocrats::Context do
         expect(subject.evidences[label]).to be_a Eurocrats::Evidence
         expect(subject.evidences[label].source).to eq source
       end
+
+      include_examples :establish_context
     end
   end
 

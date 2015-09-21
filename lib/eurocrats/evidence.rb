@@ -68,10 +68,9 @@ module Eurocrats
     # The current context in which this evidence is being used
     attr_accessor :context
 
-    # TODO optional context
-    def initialize country_code, source
+    def initialize country_code, source, context=nil
       # TODO dup && freeze the source?
-      @country_code, @source = Country.to_alpha2(country_code), source
+      @country_code, @source, @context = Country.to_alpha2(country_code), source, context
       @collected_at = DateTime.now
     end
 

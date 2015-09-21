@@ -25,7 +25,6 @@ module Eurocrats
   class Context
     extend Forwardable
 
-    # TODO configurable in Eurocrats
     VIES_EVIDENCE_LABEL = 'vies_validation'
 
     attr_reader :supplier
@@ -48,6 +47,8 @@ module Eurocrats
       # TODO default currency
       # TODO default currency from MoneyRails
 
+      # TODO clone evidences?
+      # TODO establish the context of the evidences
       @vat_rate, @minimum, @evidences = vat_rate, minimum_of_evidences, evidences
     end
 
@@ -67,6 +68,8 @@ module Eurocrats
 
     def []= label, source
       @evidences[label] = source.is_a?(Evidence) ? source : Evidence.from(source)
+      @evidences[label].context = self
+      @evidences[label]
     end
 
     def only_location_evidences
