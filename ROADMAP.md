@@ -70,16 +70,14 @@ Other ideas:
  * Example with ad hoc supplier and customer classes.
  * Integrate the `valvat` VAT number validator.
  * Capture evidences from a class that includes `Evidentiable`
- * Add some tests to `Context#calculate_with_vat` method.
  * Add some tests to `Context#validate_on_vies!` method.
+ * Method for getting all the exchange rates from one currency to others.
 
 ## 0.5.0
 
+ * Configurable global default number of minimum evidences in `Eurocrats`.
+ * Configurable global default VAT rate in `Eurocrats`
+ * Exchange examples.
  * Integrate the exchanging features into `Context`.
  * `Money` and `Numeric` objects exchange from one currency to others.
- * Method for getting all the exchange rates from one currency to others.
- * Exchange examples.
- * Use `BigDecimal` or `Money` for calculations?
- * Create a `VatRate` object?
- * Configurable global default VAT rate in `Eurocrats`
- * Configurable global default number of minimum evidences in `Eurocrats`.
+ * Use `BigDecimal` or `Money` for calculations.

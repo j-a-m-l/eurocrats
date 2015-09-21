@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.4.3 (2015-09-21) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Fix the `Context` assignation to new `Evidence`.
+ * Create the `Evidence#calculate_with_vat` method. 
+ * Change the `Evidence#calculate_vat_for` method, so it accept VAT rate as option. 
+ * Rename the `Context#default_rate` to `Context#vat_rate`.
+ * Change the `Context#calculate_with_vat` and `Context#calculate_vat_for` methods, so they accept VAT rate as option. 
+ * Add some tests to `Context#calculate_with_vat` method.
+
 ## 0.4.2 (2015-09-19) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Rename `Context#taxables?` to `Context#taxable_persons?` and add it some tests.
