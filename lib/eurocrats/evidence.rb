@@ -68,6 +68,7 @@ module Eurocrats
     # The current context in which this evidence is being used
     attr_accessor :context
 
+    # TODO optional context
     def initialize country_code, source
       # TODO dup && freeze the source?
       @country_code, @source = Country.to_alpha2(country_code), source
@@ -88,7 +89,7 @@ module Eurocrats
     # when the country is the same that the one of this Evidence.
     def vat_for_current_context rate=nil
       if context_or_raise!.should_vat_be_charged? country
-        vat_rates[ (rate || context.default_rate) ]
+        vat_rates[ (rate || context.vat_rate) ]
       else
         0
       end
@@ -97,15 +98,21 @@ module Eurocrats
 
     # Only if it belongs to a Context. It returns the VAT that should be charged
     # for an amount, when the country is the same that the one of this Evidence.
-    def calculate_vat_for amount, rate=nil
-      amount * vat_for_current_context(rate)
+    def calculate_vat_for amount, options={}
+      amount * vat_for_current_context(vat_rate: options[:rate])
     end
     alias vat_for calculate_vat_for
+
+    # TODO
+    def calculate_with_vat amount, options={}
+      amount + calculate_vat_for(amount, options)
+    end
+    alias with_vat calculate_with_vat
 
     private
 
       def context_or_raise!
-        @context or raise Eurocrats::EvidenceWithoutContextError.new 'Evidence needs a Context for performing the operation'
+        @context or raise EvidenceWithoutContextError.new 'Evidence needs a Context for performing the operation'
       end
 
   end
