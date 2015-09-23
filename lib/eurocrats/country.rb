@@ -19,7 +19,7 @@ module Eurocrats
         code = code.to_s if code.is_a? Integer
 
         unless code.is_a? String and code.length.between? 2, 3
-          raise Eurocrats::InvalidCountryCodeError.new 'The argument is not a valid ISO 3166-1 code'
+          raise InvalidCountryCodeError.new 'The argument is not a valid ISO 3166-1 code'
         end
 
         if code.length == 2
@@ -56,7 +56,7 @@ module Eurocrats
         end
 
         def raise_non_existent code, type
-          raise Eurocrats::InvalidCountryCodeError.new "\"#{code}\" is not a ISO 3166-1 #{type} code"
+          raise InvalidCountryCodeError.new "\"#{code}\" is not a ISO 3166-1 #{type} code"
         end
 
         def as_country country_or_code

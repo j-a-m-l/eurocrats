@@ -20,7 +20,7 @@ module Eurocrats
           context = Eurocrats::Context.new context_options
 
           context['ip_location'] = if Geocoder::IpAddress.new(ip).loopback?
-            Eurocrats.test_location or raise Eurocrats::TestLocationError.new '`Eurocrats.test_location` is not set'
+            Eurocrats.test_location or raise TestLocationError.new '`Eurocrats.test_location` is not set'
           else
             safe_location
           end
