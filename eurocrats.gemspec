@@ -1,21 +1,19 @@
-$:.push File.expand_path("../lib", __FILE__)
+# -*- encoding: utf-8 -*-
+require_relative './lib/eurocrats/version'
 
-# Maintain your gem's version:
-require "eurocrats/version"
-
-# Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "eurocrats"
   s.version     = Eurocrats::VERSION
+  s.summary     = 'Library / Rails engine for dealing with European VAT'
+  s.description = 'Library / Rails engine for dealing with European VAT'
+  s.license     = "MIT"
   s.authors     = ['Juan A. Martín Lucas']
   s.email       = 'eurocrats@jaml.site'
   s.homepage    = 'http://github.com/j-a-m-l/eurocrats'
-  s.summary     = "TODO: Summary of eurocrats."
-  s.description = "TODO: Description of eurocrats."
-  s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
+  s.require_paths = ['lib']
 
   # 
   s.add_dependency 'countries'

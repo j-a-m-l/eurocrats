@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.4 (2015-10-27) Juan A. Martín Lucas <eurocrats@jaml.site>
+
+ * Fix the `eurocrats.gemspec` encode and describe the gem.
+
 ## 0.4.3 (2015-09-21) Juan A. Martín Lucas <eurocrats@jaml.site>
 
  * Fix the `Context` assignation to new `Evidence`.
